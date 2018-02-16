@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Find Food Fast</string>
+
+    <!-- Icons -->
+    <string name="navigate_icon">{ion-navigate}</string>
+    <string name="call_icon">{ion-android-call}</string>
+    <string name="share_icon">{ion-android-share-alt}</string>
+    <string name="user_icon">{ion-android-person}</string>
+    <string name="close_icon">{ion-android-close}</string>
+
+    <string name="miles_away">%.1f mi</string>
+    <string name="one_review">1 review</string>
+    <string name="num_reviews">%d reviews</string>
+
+    <string name="navigate_with">Navigate with</string>
+    <string name="call_with">Call with</string>
+
+    <string name="photos"><u>Photos</u></string>
+    <string name="no_photos">There are no photos attached to this restaurant.</string>
+    <string name="what_others_saying"><u>What People Are Saying</u></string>
+    <string name="no_reviews">There are no reviews attached to this restaurant.</string>
+
+    <string name="call">Call</string>
+    <string name="share">Share</string>
+</resources>
