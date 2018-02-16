@@ -13,7 +13,7 @@
         android:paddingBottom="8dp">
 
         <com.google.android.gms.maps.MapView
-            android:id="@+id/place_map"
+            android:id="@+id/restaurant_map"
             android:layout_width="match_parent"
             android:layout_height="200dp"/>
 
@@ -91,7 +91,7 @@
             android:layout_height="150dp">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/place_photos"
+                android:id="@+id/restaurant_photos"
                 android:layout_height="match_parent"
                 android:focusable="false"
                 android:visibility="invisible"

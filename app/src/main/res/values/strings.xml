@@ -22,4 +22,6 @@
 
     <string name="call">Call</string>
     <string name="share">Share</string>
+
+    <string name="image_load_fail">Failed to load image.</string>
 </resources>
