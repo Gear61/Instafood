@@ -25,6 +25,13 @@ public class RestaurantInfoView {
     @BindView(R.id.distance) TextView distance;
     @BindView(R.id.price) TextView price;
 
+    @BindView(R.id.distance_container) View distanceContainer;
+    @BindView(R.id.restaurant_info) View restaurantInfo;
+
+    @BindView(R.id.thumbnail_stub) View thumbnailStub;
+    @BindView(R.id.info_stub) View infoStub;
+    @BindView(R.id.distance_stub) View distanceStub;
+
     @BindDrawable(R.drawable.gray_border) Drawable grayBorder;
 
     private Context context;
@@ -36,7 +43,21 @@ public class RestaurantInfoView {
         ButterKnife.bind(this, view);
     }
 
+    public void setSkeletonVisibility(boolean skeletonVisible) {
+        int newSkeletonVisibility = skeletonVisible ? View.VISIBLE : View.GONE;
+        thumbnailStub.setVisibility(newSkeletonVisibility);
+        infoStub.setVisibility(newSkeletonVisibility);
+        distanceStub.setVisibility(newSkeletonVisibility);
+
+        int newRestaurantInfoVisibility = skeletonVisible ? View.GONE : View.VISIBLE;
+        thumbnail.setVisibility(newRestaurantInfoVisibility);
+        restaurantInfo.setVisibility(newRestaurantInfoVisibility);
+        distanceContainer.setVisibility(newRestaurantInfoVisibility);
+    }
+
     public void loadRestaurant(Restaurant restaurant) {
+        setSkeletonVisibility(false);
+
         String restaurantImageUrl = restaurant.getImageUrl();
         if (restaurantImageUrl != null && !restaurantImageUrl.isEmpty()) {
             thumbnail.setBackground(null);
