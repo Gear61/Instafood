@@ -31,8 +31,4 @@
     <string name="restaurant_call_bad_result">
         We were unable to find a restaurant for you. Please try again later.
     </string>
-    <string name="restaurant_call_failed">
-        We failed to find a restaurant for you.
-        Please make sure that you have a stable Internet connection and try again.
-    </string>
 </resources>

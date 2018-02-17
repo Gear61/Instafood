@@ -61,7 +61,5 @@ public class FindRestaurantsCallback implements Callback<RestaurantSearchResults
     }
 
     @Override
-    public void onFailure(@NonNull Call<RestaurantSearchResults> call, @NonNull Throwable t) {
-        UIUtils.showLongToast(R.string.restaurant_call_failed);
-    }
+    public void onFailure(@NonNull Call<RestaurantSearchResults> call, @NonNull Throwable error) {}
 }
