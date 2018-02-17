@@ -26,4 +26,13 @@
     <string name="image_load_fail">Failed to load image.</string>
 
     <string name="find_new_restaurant">Find new restaurant</string>
+    <string name="no_open_restaurants">There are no open restaurants near you.</string>
+
+    <string name="restaurant_call_bad_result">
+        We were unable to find a restaurant for you. Please try again later.
+    </string>
+    <string name="restaurant_call_failed">
+        We failed to find a restaurant for you.
+        Please make sure that you have a stable Internet connection and try again.
+    </string>
 </resources>

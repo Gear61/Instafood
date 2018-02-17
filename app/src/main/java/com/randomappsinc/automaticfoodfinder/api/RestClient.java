@@ -14,7 +14,9 @@ import com.randomappsinc.automaticfoodfinder.api.models.RestaurantSearchResults;
 import com.randomappsinc.automaticfoodfinder.models.Restaurant;
 import com.randomappsinc.automaticfoodfinder.models.RestaurantReview;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -55,6 +57,7 @@ public class RestClient {
     private Retrofit retrofit;
     private YelpService yelpService;
     private Handler handler;
+    private Set<String> alreadyVisitedRestaurants;
 
     // Restaurants
     @NonNull private RestaurantListener restaurantListener = DUMMY_RESTAURANT_LISTENER;
@@ -91,6 +94,8 @@ public class RestClient {
         HandlerThread backgroundThread = new HandlerThread("");
         backgroundThread.start();
         handler = new Handler(backgroundThread.getLooper());
+
+        alreadyVisitedRestaurants = new HashSet<>();
     }
 
     public Retrofit getRetrofitInstance() {
@@ -115,7 +120,7 @@ public class RestClient {
                         location,
                         ApiConstants.DEFAULT_NUM_RESTAURANT_RESULTS,
                         true);
-                currentFindRestaurantsCall.enqueue(new FindRestaurantsCallback());
+                currentFindRestaurantsCall.enqueue(new FindRestaurantsCallback(alreadyVisitedRestaurants));
             }
         });
     }
@@ -128,7 +133,8 @@ public class RestClient {
         restaurantListener = DUMMY_RESTAURANT_LISTENER;
     }
 
-    public void processRestaurant(@Nullable Restaurant restaurant) {
+    public void processRestaurant(Restaurant restaurant) {
+        alreadyVisitedRestaurants.add(restaurant.getId());
         restaurantListener.onRestaurantFetched(restaurant);
     }
 
