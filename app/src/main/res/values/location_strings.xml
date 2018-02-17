@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="location">Location</string>
-    <string name="set_location">Set location</string>
     <string name="location_form_title">Set Location</string>
-    <string name="location_form_prompt">Where do you want Around Me to search?</string>
+    <string name="location_form_prompt">Where do you want Instafood to search?</string>
 
     <string name="auto_location_fail">
         We couldn\'t get your current location.
@@ -11,19 +10,19 @@
     </string>
 
     <string name="turn_on_location_services">
-        Turn on location services so Around Me can find places near you.
+        Turn on location services so Instafood can find places near you.
     </string>
 
     <string name="location_services_needed">Location Services Needed</string>
     <string name="location_services_denial">
-        Around Me needs location services to find places and events near you.
+        Instafood needs location services to find places and events near you.
     </string>
     <string name="location_services_confirm">Turn on location services</string>
     <string name="enter_location_manually">Enter in location manually</string>
 
     <string name="location_permission_needed">Location Permission Needed</string>
     <string name="location_permission_denial">
-        Around Me needs permission to access your current location to find places and events near you.
+        Instafood needs permission to access your current location to find places and events near you.
     </string>
     <string name="give_location_permission">Give us location permission</string>
 

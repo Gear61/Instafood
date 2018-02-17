@@ -25,8 +25,9 @@ public class RestaurantReviewsAdapter implements RestaurantReviewCell.Listener {
     }
 
     public void setReviews(List<RestaurantReview> reviews, ViewGroup reviewContainer, Context context) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        reviewContainer.removeAllViews();
 
+        LayoutInflater inflater = LayoutInflater.from(context);
         if (reviews.isEmpty()) {
             View noReviewsCell = inflater.inflate(
                     R.layout.no_reviews_cell,

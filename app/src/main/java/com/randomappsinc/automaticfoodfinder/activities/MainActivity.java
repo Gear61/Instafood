@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -121,6 +123,10 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     private final GoogleMap.OnMapClickListener mapClickListener = new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
+            if (restaurant == null) {
+                return;
+            }
+
             String mapUri = "google.navigation:q=" + restaurant.getAddress() + " " + restaurant.getName();
             startActivity(Intent.createChooser(
                     new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(mapUri)),
@@ -179,7 +185,16 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     @Override
     public void onReviewsFetched(List<RestaurantReview> reviews) {
         reviewsStub.setVisibility(View.GONE);
+        reviewsContainer.setVisibility(View.VISIBLE);
         reviewsAdapter.setReviews(reviews, reviewsContainer, this);
+    }
+
+    private void turnOnSkeletonLoading() {
+        restaurantInfoView.setSkeletonVisibility(true);
+        photos.setVisibility(View.INVISIBLE);
+        photosStub.setVisibility(View.VISIBLE);
+        reviewsContainer.setVisibility(View.GONE);
+        reviewsStub.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -296,5 +311,23 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         // Stop listening for review fetch results
         restClient.cancelReviewsFetch();
         restClient.unregisterReviewsListener();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        UIUtils.loadMenuIcon(menu, R.id.find_new_restaurant, IoniconsIcons.ion_android_refresh, this);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.find_new_restaurant && currentLocation != null) {
+            restaurant = null;
+            turnOnSkeletonLoading();
+            restClient.findRestaurant(currentLocation);
+            return true;
+        }
+        return false;
     }
 }

@@ -24,4 +24,6 @@
     <string name="share">Share</string>
 
     <string name="image_load_fail">Failed to load image.</string>
+
+    <string name="find_new_restaurant">Find new restaurant</string>
 </resources>
