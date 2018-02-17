@@ -24,7 +24,10 @@ public class FindRestaurantsCallback implements Callback<RestaurantSearchResults
                 RestClient.getInstance().processRestaurant(null);
             } else {
                 int randomIndex = (new Random()).nextInt(restaurants.size());
-                RestClient.getInstance().processRestaurant(restaurants.get(randomIndex));
+                Restaurant chosenOne = restaurants.get(randomIndex);
+                RestClient.getInstance().processRestaurant(chosenOne);
+                RestClient.getInstance().fetchRestaurantPhotos(chosenOne);
+                RestClient.getInstance().fetchRestaurantReviews(chosenOne);
             }
         }
         // TODO: Process failure here

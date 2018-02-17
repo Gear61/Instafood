@@ -1,11 +1,14 @@
 package com.randomappsinc.automaticfoodfinder.views;
 
 import android.content.Context;
+import android.support.annotation.StringRes;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.IconDrawable;
 import com.randomappsinc.automaticfoodfinder.R;
+import com.randomappsinc.automaticfoodfinder.utils.MyApplication;
 
 public class UIUtils {
 
@@ -45,5 +48,13 @@ public class UIUtils {
             return R.drawable.stars_4_and_a_half;
         }
         return R.drawable.stars_5;
+    }
+
+    public static void showLongToast(@StringRes int stringId) {
+        showToast(stringId, Toast.LENGTH_LONG);
+    }
+
+    private static void showToast(@StringRes int stringId, int toastLength) {
+        Toast.makeText(MyApplication.getAppContext(), stringId, toastLength).show();
     }
 }

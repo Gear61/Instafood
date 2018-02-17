@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Find Food Fast</string>
+    <string name="app_name">Instafood</string>
 
     <!-- Icons -->
     <string name="navigate_icon">{ion-navigate}</string>

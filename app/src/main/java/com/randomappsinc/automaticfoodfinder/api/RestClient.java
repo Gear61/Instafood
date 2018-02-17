@@ -97,15 +97,21 @@ public class RestClient {
         return retrofit;
     }
 
-    public void findRestaurants(final String searchTerm, final String location) {
+    public void findRestaurant(final String location) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 if (currentFindRestaurantsCall != null) {
                     currentFindRestaurantsCall.cancel();
                 }
+                if (currentFetchPhotosCall != null) {
+                    currentFetchPhotosCall.cancel();
+                }
+                if (currentFetchReviewsCall != null) {
+                    currentFetchReviewsCall.cancel();
+                }
                 currentFindRestaurantsCall = yelpService.findRestaurants(
-                        searchTerm,
+                        ApiConstants.DEFAULT_SEARCH_TERM,
                         location,
                         ApiConstants.DEFAULT_NUM_RESTAURANT_RESULTS,
                         true);
@@ -114,11 +120,11 @@ public class RestClient {
         });
     }
 
-    public void registerRestaurantsListener(RestaurantListener restaurantsListener) {
+    public void registerRestaurantListener(RestaurantListener restaurantsListener) {
         this.restaurantListener = restaurantsListener;
     }
 
-    public void unregisterRestaurantsListener() {
+    public void unregisterRestaurantListener() {
         restaurantListener = DUMMY_RESTAURANT_LISTENER;
     }
 
@@ -126,7 +132,7 @@ public class RestClient {
         restaurantListener.onRestaurantFetched(restaurant);
     }
 
-    public void cancelRestaurantsFetch() {
+    public void cancelRestaurantFetch() {
         handler.post(new Runnable() {
             @Override
             public void run() {
