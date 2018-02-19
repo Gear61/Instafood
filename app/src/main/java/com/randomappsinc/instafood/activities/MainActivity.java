@@ -117,6 +117,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     }
 
     private void loadRestaurantLocationInMap() {
+        googleMap.clear();
         LatLng coordinates = new LatLng(restaurant.getLatitude(), restaurant.getLongitude());
         googleMap.addMarker(new MarkerOptions()
                 .position(coordinates)
