@@ -146,13 +146,9 @@ public class LocationManager implements LocationForm.Listener {
         locationChecker.postDelayed(locationCheckTask, 10000L);
     }
 
-    public void stopFetchingCurrentLocation() {
+    private void stopFetchingCurrentLocation() {
         locationChecker.removeCallbacks(locationCheckTask);
         SmartLocation.with(activity).location().stop();
-    }
-
-    public void showLocationForm() {
-        locationForm.show();
     }
 
     public void showLocationDenialDialog() {

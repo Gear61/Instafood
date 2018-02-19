@@ -213,7 +213,10 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String permissions[],
+            @NonNull int[] grantResults) {
         if (requestCode != LocationManager.LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
@@ -322,11 +325,15 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.find_new_restaurant && currentLocation != null) {
-            restaurant = null;
-            turnOnSkeletonLoading();
-            restClient.findRestaurant(currentLocation);
-            return true;
+        if (item.getItemId() == R.id.find_new_restaurant) {
+            if (currentLocation == null) {
+                locationManager.fetchCurrentLocation();
+            } else {
+                restaurant = null;
+                turnOnSkeletonLoading();
+                restClient.findRestaurant(currentLocation);
+                return true;
+            }
         }
         return false;
     }
