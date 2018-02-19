@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -50,6 +51,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
 
     private static final int FILTER_REQUEST_CODE = 1;
 
+    @BindView(R.id.parent) ScrollView parent;
     @BindView(R.id.restaurant_map) MapView restaurantMap;
     @BindView(R.id.restaurant_info_parent) View restaurantInfo;
     @BindView(R.id.photos_stub) View photosStub;
@@ -201,6 +203,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         if (currentLocation == null) {
             locationManager.fetchCurrentLocation();
         } else {
+            parent.fullScroll(ScrollView.FOCUS_UP);
             restaurant = null;
             restClient.findRestaurant(currentLocation);
             turnOnSkeletonLoading();
