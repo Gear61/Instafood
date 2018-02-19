@@ -7,7 +7,7 @@ import com.randomappsinc.instafood.api.ApiConstants;
 import com.randomappsinc.instafood.api.RestClient;
 import com.randomappsinc.instafood.api.models.RestaurantSearchResults;
 import com.randomappsinc.instafood.models.Restaurant;
-import com.randomappsinc.instafood.views.UIUtils;
+import com.randomappsinc.instafood.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;

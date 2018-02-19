@@ -6,9 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.randomappsinc.instafood.R;
+import com.randomappsinc.instafood.persistence.PreferencesManager;
+import com.randomappsinc.instafood.utils.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +57,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
     class SettingViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.settings_icon) TextView icon;
         @BindView(R.id.settings_option) TextView option;
+        @BindView(R.id.shake_toggle) Switch shakeToggle;
 
         SettingViewHolder(View view) {
             super(view);
@@ -63,6 +67,18 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
         void loadSetting(int position) {
             option.setText(options[position]);
             icon.setText(icons[position]);
+
+            if (position == 0) {
+                UIUtils.setCheckedImmediately(shakeToggle, PreferencesManager.get().isShakeEnabled());
+                shakeToggle.setVisibility(View.VISIBLE);
+            } else {
+                shakeToggle.setVisibility(View.GONE);
+            }
+        }
+
+        @OnClick(R.id.shake_toggle)
+        public void onSoundToggle() {
+            PreferencesManager.get().setShakeEnabled(shakeToggle.isChecked());
         }
 
         @OnClick(R.id.parent)

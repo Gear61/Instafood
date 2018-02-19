@@ -6,6 +6,7 @@ import android.widget.CheckBox;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.constants.PlaceAttribute;
 import com.randomappsinc.instafood.models.Filter;
+import com.randomappsinc.instafood.utils.UIUtils;
 
 import java.util.HashSet;
 import java.util.Set;

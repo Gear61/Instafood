@@ -10,6 +10,7 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.models.RestaurantReview;
+import com.randomappsinc.instafood.utils.UIUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;

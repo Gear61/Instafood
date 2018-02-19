@@ -11,6 +11,7 @@ import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
 import com.randomappsinc.instafood.utils.StringUtils;
+import com.randomappsinc.instafood.utils.UIUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindDrawable;

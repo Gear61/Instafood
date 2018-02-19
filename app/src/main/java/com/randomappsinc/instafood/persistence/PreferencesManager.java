@@ -20,6 +20,7 @@ public class PreferencesManager {
     private static final String FILTER_RADIUS = "filterRadius";
     private static final String FILTER_PRICE_RANGES = "filterPriceRanges";
     private static final String FILTER_ATTRIBUTES = "filterAttributes";
+    private static final String SHAKE_ENABLED = "shakeEnabled";
 
     private static PreferencesManager instance;
 
@@ -68,5 +69,13 @@ public class PreferencesManager {
 
     public void setDistanceUnit(@DistanceUnit String distanceUnit) {
         prefs.edit().putString(DISTANCE_UNIT_KEY, distanceUnit).apply();
+    }
+
+    public void setShakeEnabled(boolean shakeEnabled) {
+        prefs.edit().putBoolean(SHAKE_ENABLED, shakeEnabled).apply();
+    }
+
+    public boolean isShakeEnabled() {
+        return prefs.getBoolean(SHAKE_ENABLED, true);
     }
 }

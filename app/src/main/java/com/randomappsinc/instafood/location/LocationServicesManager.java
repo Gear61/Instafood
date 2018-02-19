@@ -16,7 +16,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.randomappsinc.instafood.R;
-import com.randomappsinc.instafood.views.UIUtils;
+import com.randomappsinc.instafood.utils.UIUtils;
 
 /** Utility class to ask for location services */
 class LocationServicesManager {

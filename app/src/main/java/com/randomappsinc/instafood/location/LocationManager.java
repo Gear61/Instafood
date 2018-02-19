@@ -10,7 +10,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.utils.PermissionUtils;
-import com.randomappsinc.instafood.views.UIUtils;
+import com.randomappsinc.instafood.utils.UIUtils;
 
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;

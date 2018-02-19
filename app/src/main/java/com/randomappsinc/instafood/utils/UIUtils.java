@@ -1,15 +1,14 @@
-package com.randomappsinc.instafood.views;
+package com.randomappsinc.instafood.utils;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.view.Menu;
-import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.IconDrawable;
 import com.randomappsinc.instafood.R;
-import com.randomappsinc.instafood.utils.MyApplication;
 
 public class UIUtils {
 
@@ -59,8 +58,8 @@ public class UIUtils {
         Toast.makeText(MyApplication.getAppContext(), stringId, toastLength).show();
     }
 
-    public static void setCheckedImmediately(CheckBox checkbox, boolean checked) {
-        checkbox.setChecked(checked);
-        checkbox.jumpDrawablesToCurrentState();
+    public static void setCheckedImmediately(CompoundButton checkableView, boolean checked) {
+        checkableView.setChecked(checked);
+        checkableView.jumpDrawablesToCurrentState();
     }
 }

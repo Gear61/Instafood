@@ -7,7 +7,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
-import com.randomappsinc.instafood.views.UIUtils;
+import com.randomappsinc.instafood.utils.UIUtils;
 
 public class DistanceUnitChooser {
 

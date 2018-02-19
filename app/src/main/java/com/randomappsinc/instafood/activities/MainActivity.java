@@ -2,6 +2,7 @@ package com.randomappsinc.instafood.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,8 +31,10 @@ import com.randomappsinc.instafood.api.RestClient;
 import com.randomappsinc.instafood.location.LocationManager;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
+import com.randomappsinc.instafood.persistence.PreferencesManager;
+import com.randomappsinc.instafood.utils.UIUtils;
 import com.randomappsinc.instafood.views.RestaurantInfoView;
-import com.randomappsinc.instafood.views.UIUtils;
+import com.squareup.seismic.ShakeDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +45,8 @@ import butterknife.OnClick;
 
 public class MainActivity extends StandardActivity implements RestClient.PhotosListener,
         RestClient.RestaurantListener, RestClient.ReviewsListener, RestaurantReviewsAdapter.Listener,
-        RestaurantPhotosAdapter.Listener, OnMapReadyCallback, LocationManager.Listener {
+        RestaurantPhotosAdapter.Listener, OnMapReadyCallback, LocationManager.Listener,
+        ShakeDetector.Listener {
 
     private static final int FILTER_REQUEST_CODE = 1;
 
@@ -62,6 +66,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     @Nullable private String currentLocation;
     private LocationManager locationManager;
     private boolean denialLock;
+    private ShakeDetector shakeDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         ButterKnife.bind(this);
 
         locationManager = new LocationManager(this, this);
+        shakeDetector = new ShakeDetector(this);
 
         restaurantMap.onCreate(savedInstanceState);
         restaurantMap.getMapAsync(this);
@@ -192,9 +198,13 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     }
 
     private void resetAndFindNewRestaurant() {
-        restaurant = null;
-        restClient.findRestaurant(currentLocation);
-        turnOnSkeletonLoading();
+        if (currentLocation == null) {
+            locationManager.fetchCurrentLocation();
+        } else {
+            restaurant = null;
+            restClient.findRestaurant(currentLocation);
+            turnOnSkeletonLoading();
+        }
     }
 
     private void turnOnSkeletonLoading() {
@@ -273,9 +283,10 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        restaurantMap.onSaveInstanceState(outState);
+    public void hearShake() {
+        if (restaurant != null) {
+            resetAndFindNewRestaurant();
+        }
     }
 
     @Override
@@ -290,6 +301,16 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         if (currentLocation == null && !denialLock) {
             locationManager.fetchCurrentLocation();
         }
+
+        if (PreferencesManager.get().isShakeEnabled()) {
+            shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        restaurantMap.onSaveInstanceState(outState);
     }
 
     @Override
@@ -302,6 +323,10 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     public void onPause() {
         super.onPause();
         restaurantMap.onPause();
+
+        if (PreferencesManager.get().isShakeEnabled()) {
+            shakeDetector.stop();
+        }
     }
 
     @Override
@@ -347,12 +372,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.find_new_restaurant:
-                if (currentLocation == null) {
-                    locationManager.fetchCurrentLocation();
-                } else {
-                    resetAndFindNewRestaurant();
-                    return true;
-                }
+                resetAndFindNewRestaurant();
                 return true;
             case R.id.filter:
                 startActivityForResult(

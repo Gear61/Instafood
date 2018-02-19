@@ -8,6 +8,7 @@ import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.constants.PriceRange;
 import com.randomappsinc.instafood.models.Filter;
 import com.randomappsinc.instafood.utils.StringUtils;
+import com.randomappsinc.instafood.utils.UIUtils;
 
 import java.util.HashSet;
 import java.util.Set;

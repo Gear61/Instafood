@@ -5,12 +5,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Switch;
 
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.adapters.SettingsAdapter;
 import com.randomappsinc.instafood.dialogs.DistanceUnitChooser;
+import com.randomappsinc.instafood.persistence.PreferencesManager;
+import com.randomappsinc.instafood.utils.UIUtils;
 import com.randomappsinc.instafood.views.SimpleDividerItemDecoration;
-import com.randomappsinc.instafood.views.UIUtils;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -48,15 +51,22 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
         Intent intent = null;
         switch (position) {
             case 0:
-                distanceUnitChooser.show();
+                View firstCell = settingsOptions.getChildAt(0);
+                Switch shakeToggle = firstCell.findViewById(R.id.shake_toggle);
+                boolean currentState = shakeToggle.isChecked();
+                shakeToggle.setChecked(!currentState);
+                PreferencesManager.get().setShakeEnabled(!currentState);
                 return;
             case 1:
+                distanceUnitChooser.show();
+                return;
+            case 2:
                 String uriText = "mailto:" + SUPPORT_EMAIL + "?subject=" + Uri.encode(feedbackSubject);
                 Uri mailUri = Uri.parse(uriText);
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO, mailUri);
                 startActivity(Intent.createChooser(sendIntent, sendEmail));
                 return;
-            case 2:
+            case 3:
                 Intent shareIntent = ShareCompat.IntentBuilder.from(this)
                         .setType("text/plain")
                         .setText(getString(R.string.share_app_message))
@@ -65,10 +75,10 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
                     startActivity(shareIntent);
                 }
                 return;
-            case 3:
+            case 4:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(OTHER_APPS_URL));
                 break;
-            case 4:
+            case 5:
                 Uri uri =  Uri.parse("market://details?id=" + getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
@@ -76,7 +86,7 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
                     return;
                 }
                 break;
-            case 5:
+            case 6:
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL));
                 break;
         }
