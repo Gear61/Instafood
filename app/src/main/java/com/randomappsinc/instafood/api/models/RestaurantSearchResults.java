@@ -4,8 +4,10 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantCategory;
+import com.randomappsinc.instafood.persistence.PreferencesManager;
 import com.randomappsinc.instafood.utils.DistanceUtils;
 
 import java.util.ArrayList;
@@ -85,32 +87,8 @@ public class RestaurantSearchResults {
             @Expose
             private String city;
 
-            @SerializedName("zip_code")
-            @Expose
-            private String zipCode;
-
-            @SerializedName("country")
-            @Expose
-            private String country;
-
-            @SerializedName("state")
-            @Expose
-            private String state;
-
             String getCity() {
                 return city;
-            }
-
-            String getZipCode() {
-                return zipCode;
-            }
-
-            String getCountry() {
-                return country;
-            }
-
-            String getState() {
-                return state;
             }
 
             String getAddress() {
@@ -160,14 +138,12 @@ public class RestaurantSearchResults {
             restaurant.setReviewCount(reviewCount);
             restaurant.setPhoneNumber(phoneNumber);
             restaurant.setPrice(price);
-            restaurant.setCity(location.getCity());
-            restaurant.setZipCode(location.getZipCode());
-            restaurant.setState(location.getState());
-            restaurant.setCountry(location.getCountry());
             restaurant.setAddress(location.getAddress());
             restaurant.setLatitude(coordinates.getLatitude());
             restaurant.setLongitude(coordinates.getLongitude());
-            restaurant.setDistance(DistanceUtils.getMilesFromMeters(distance));
+            restaurant.setDistance(PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
+                    ? DistanceUtils.getMilesFromMeters(distance)
+                    : DistanceUtils.getKilometersFromMeters(distance));
             List<RestaurantCategory> restaurantCategories = new ArrayList<>();
             for (Category category : categories) {
                 RestaurantCategory restaurantCategory = new RestaurantCategory();

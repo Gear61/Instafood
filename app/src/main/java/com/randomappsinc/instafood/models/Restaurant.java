@@ -12,16 +12,13 @@ public class Restaurant {
     private int reviewCount;
     private String phoneNumber;
     private String price;
-    private String city;
-    private String zipCode;
-    private String country;
-    private String state;
     private String address;
     private double latitute;
     private double longitude;
     private List<RestaurantCategory> categories;
 
-    // Distance between the place location and the user's current location in miles
+    // Distance between the place location and the user's current location in miles/kilometers
+    // Miles vs. kilometers is determined by the user's setting
     private double mDistance;
 
     public String getId() {
@@ -86,22 +83,6 @@ public class Restaurant {
 
     public void setPrice(String price) {
         this.price = price;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public String getAddress() {

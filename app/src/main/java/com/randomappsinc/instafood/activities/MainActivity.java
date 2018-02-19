@@ -192,7 +192,9 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     }
 
     private void resetAndFindNewRestaurant() {
-
+        restaurant = null;
+        restClient.findRestaurant(currentLocation);
+        turnOnSkeletonLoading();
     }
 
     private void turnOnSkeletonLoading() {
@@ -281,6 +283,9 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         super.onResume();
         restaurantMap.onResume();
 
+        // Re-render distance text since they might have changed their distance setting
+        restaurantInfoView.renderDistanceText();
+
         // Run this here instead of onCreate() to cover the case where they return from turning on location
         if (currentLocation == null && !denialLock) {
             locationManager.fetchCurrentLocation();
@@ -334,6 +339,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         getMenuInflater().inflate(R.menu.menu_main, menu);
         UIUtils.loadMenuIcon(menu, R.id.find_new_restaurant, IoniconsIcons.ion_android_refresh, this);
         UIUtils.loadMenuIcon(menu, R.id.filter, IoniconsIcons.ion_funnel, this);
+        UIUtils.loadMenuIcon(menu, R.id.settings, IoniconsIcons.ion_android_settings, this);
         return true;
     }
 
@@ -353,6 +359,9 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
                         new Intent(this, FilterActivity.class),
                         FILTER_REQUEST_CODE);
                 overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
+                return true;
+            case R.id.settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
         }
         return false;

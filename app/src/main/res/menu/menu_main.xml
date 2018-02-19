@@ -12,4 +12,9 @@
         android:id="@+id/filter"
         android:title="@string/filter"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/settings"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom"/>
 </menu>

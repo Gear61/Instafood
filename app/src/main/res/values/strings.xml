@@ -9,6 +9,7 @@
     <string name="close_icon">{ion-android-close}</string>
 
     <string name="miles_away">%.1f mi</string>
+    <string name="kilometers_away">%.1f km</string>
     <string name="one_review">1 review</string>
     <string name="num_reviews">%d reviews</string>
 
@@ -22,6 +23,8 @@
 
     <string name="call">Call</string>
     <string name="share">Share</string>
+    <string name="choose">Choose</string>
+    <string name="cancel">Cancel</string>
 
     <string name="image_load_fail">Failed to load image.</string>
 

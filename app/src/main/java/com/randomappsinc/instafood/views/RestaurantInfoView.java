@@ -7,7 +7,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.randomappsinc.instafood.R;
+import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.models.Restaurant;
+import com.randomappsinc.instafood.persistence.PreferencesManager;
+import com.randomappsinc.instafood.utils.StringUtils;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindDrawable;
@@ -36,6 +39,7 @@ public class RestaurantInfoView {
 
     private Context context;
     private Drawable defaultThumbnail;
+    private Restaurant restaurant;
 
     public RestaurantInfoView(Context context, View view, Drawable defaultThumbnail) {
         this.context = context;
@@ -56,6 +60,7 @@ public class RestaurantInfoView {
     }
 
     public void loadRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
         setSkeletonVisibility(false);
 
         String restaurantImageUrl = restaurant.getImageUrl();
@@ -90,10 +95,7 @@ public class RestaurantInfoView {
             categories.setVisibility(View.VISIBLE);
         }
 
-        String distanceTemplate = context.getString(R.string.miles_away);
-        String distanceText = String.format(distanceTemplate, restaurant.getDistance());
-        distance.setText(distanceText);
-
+        renderDistanceText();
         String restaurantPrice = restaurant.getPrice();
         if (restaurantPrice == null || restaurantPrice.isEmpty()) {
             price.setVisibility(View.GONE);
@@ -101,5 +103,17 @@ public class RestaurantInfoView {
             price.setText(restaurant.getPrice());
             price.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void renderDistanceText() {
+        if (restaurant == null) {
+            return;
+        }
+
+        String distanceTemplate = PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
+                ? StringUtils.getString(R.string.miles_away)
+                : StringUtils.getString(R.string.kilometers_away);
+        String distanceText = String.format(distanceTemplate, restaurant.getDistance());
+        distance.setText(distanceText);
     }
 }

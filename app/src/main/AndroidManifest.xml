@@ -43,5 +43,10 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 </manifest>
