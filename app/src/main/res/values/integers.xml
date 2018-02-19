@@ -2,4 +2,7 @@
 <resources>
     <integer name="default_anim_length">250</integer>
     <integer name="skeleton_anim_length">1000</integer>
+
+    <integer name="max_radius_volume_miles">247</integer>
+    <integer name="max_radius_volume_kilometers">399</integer>
 </resources>

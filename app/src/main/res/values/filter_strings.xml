@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="filter">Filter</string>
+    <string name="reset_all">Reset all</string>
+    <string name="search_radius">Search radius</string>
+    <string name="radius_text_miles">Show me places within %.1f miles of me.</string>
+    <string name="radius_text_kilometers">Show me places within %.1f kilometers of me.</string>
+    <string name="sort_by">Sort by</string>
+    <string name="apply_filter">Apply Filter</string>
+    <string name="filter_applied">Filter applied.</string>
+
+    <string name="price_range">Price range</string>
+    <string name="cheap">Cheap</string>
+    <string name="moderate">Moderate</string>
+    <string name="pricey">Pricey</string>
+    <string name="very_expensive">Very expensive</string>
+
+    <string name="other_options">Other options</string>
+    <string name="hot_and_new">Hot and new</string>
+    <string name="gender_neutral_restrooms">Gender neutral restrooms</string>
+</resources>

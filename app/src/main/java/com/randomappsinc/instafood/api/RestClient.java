@@ -11,8 +11,10 @@ import com.randomappsinc.instafood.api.callbacks.FindRestaurantsCallback;
 import com.randomappsinc.instafood.api.models.RestaurantPhotos;
 import com.randomappsinc.instafood.api.models.RestaurantReviewResults;
 import com.randomappsinc.instafood.api.models.RestaurantSearchResults;
+import com.randomappsinc.instafood.models.Filter;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
+import com.randomappsinc.instafood.persistence.PreferencesManager;
 
 import java.util.HashSet;
 import java.util.List;
@@ -115,11 +117,15 @@ public class RestClient {
                 if (currentFetchReviewsCall != null) {
                     currentFetchReviewsCall.cancel();
                 }
+                Filter filter = PreferencesManager.get().getFilter();
                 currentFindRestaurantsCall = yelpService.findRestaurants(
                         ApiConstants.DEFAULT_SEARCH_TERM,
                         location,
                         ApiConstants.DEFAULT_NUM_RESTAURANT_RESULTS,
-                        true);
+                        true,
+                        (int) filter.getRadius(),
+                        filter.getPriceRangesString(),
+                        filter.getAttributesString());
                 currentFindRestaurantsCall.enqueue(new FindRestaurantsCallback(alreadyVisitedRestaurants));
             }
         });

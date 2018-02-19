@@ -15,7 +15,10 @@ public interface YelpService {
     Call<RestaurantSearchResults> findRestaurants(@Query("term") String term,
                                                   @Query("location") String location,
                                                   @Query("limit") int limit,
-                                                  @Query("open_now") boolean openNow);
+                                                  @Query("open_now") boolean openNow,
+                                                  @Query("radius") int radius,
+                                                  @Query("price") String priceRanges,
+                                                  @Query("attributes") String attributes);
 
     @GET("v3/businesses/{id}")
     Call<RestaurantPhotos> fetchRestaurantPhotos(@Path("id") String restaurantId);

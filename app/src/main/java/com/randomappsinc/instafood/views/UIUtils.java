@@ -3,6 +3,7 @@ package com.randomappsinc.instafood.views;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.view.Menu;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.joanzapata.iconify.Icon;
@@ -56,5 +57,10 @@ public class UIUtils {
 
     private static void showToast(@StringRes int stringId, int toastLength) {
         Toast.makeText(MyApplication.getAppContext(), stringId, toastLength).show();
+    }
+
+    public static void setCheckedImmediately(CheckBox checkbox, boolean checked) {
+        checkbox.setChecked(checked);
+        checkbox.jumpDrawablesToCurrentState();
     }
 }

@@ -7,4 +7,9 @@
         android:id="@+id/find_new_restaurant"
         android:title="@string/find_new_restaurant"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/filter"
+        android:title="@string/filter"
+        app:showAsAction="ifRoom"/>
 </menu>

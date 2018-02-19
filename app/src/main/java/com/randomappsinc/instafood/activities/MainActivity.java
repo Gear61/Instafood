@@ -44,6 +44,8 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         RestClient.RestaurantListener, RestClient.ReviewsListener, RestaurantReviewsAdapter.Listener,
         RestaurantPhotosAdapter.Listener, OnMapReadyCallback, LocationManager.Listener {
 
+    private static final int FILTER_REQUEST_CODE = 1;
+
     @BindView(R.id.restaurant_map) MapView restaurantMap;
     @BindView(R.id.restaurant_info_parent) View restaurantInfo;
     @BindView(R.id.photos_stub) View photosStub;
@@ -189,6 +191,10 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         reviewsAdapter.setReviews(reviews, reviewsContainer, this);
     }
 
+    private void resetAndFindNewRestaurant() {
+
+    }
+
     private void turnOnSkeletonLoading() {
         restaurantInfoView.setSkeletonVisibility(true);
         photos.setVisibility(View.INVISIBLE);
@@ -231,14 +237,21 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LocationManager.LOCATION_SERVICES_CODE) {
-            if (resultCode == RESULT_OK) {
-                UIUtils.showLongToast(R.string.location_services_on);
-                locationManager.fetchAutomaticLocation();
-            } else {
-                denialLock = true;
-                locationManager.showLocationDenialDialog();
-            }
+        switch (requestCode) {
+            case LocationManager.LOCATION_SERVICES_CODE:
+                if (resultCode == RESULT_OK) {
+                    UIUtils.showLongToast(R.string.location_services_on);
+                    locationManager.fetchAutomaticLocation();
+                } else {
+                    denialLock = true;
+                    locationManager.showLocationDenialDialog();
+                }
+                break;
+            case FILTER_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    resetAndFindNewRestaurant();
+                }
+                break;
         }
     }
 
@@ -320,20 +333,27 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         UIUtils.loadMenuIcon(menu, R.id.find_new_restaurant, IoniconsIcons.ion_android_refresh, this);
+        UIUtils.loadMenuIcon(menu, R.id.filter, IoniconsIcons.ion_funnel, this);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.find_new_restaurant) {
-            if (currentLocation == null) {
-                locationManager.fetchCurrentLocation();
-            } else {
-                restaurant = null;
-                turnOnSkeletonLoading();
-                restClient.findRestaurant(currentLocation);
+        switch (item.getItemId()) {
+            case R.id.find_new_restaurant:
+                if (currentLocation == null) {
+                    locationManager.fetchCurrentLocation();
+                } else {
+                    resetAndFindNewRestaurant();
+                    return true;
+                }
                 return true;
-            }
+            case R.id.filter:
+                startActivityForResult(
+                        new Intent(this, FilterActivity.class),
+                        FILTER_REQUEST_CODE);
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
+                return true;
         }
         return false;
     }
