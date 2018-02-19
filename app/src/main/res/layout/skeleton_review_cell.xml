@@ -24,17 +24,17 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <com.randomappsinc.automaticfoodfinder.views.SkeletonView
+            <com.randomappsinc.instafood.views.SkeletonView
                 android:layout_width="32dp"
                 android:layout_height="32dp"/>
 
-            <com.randomappsinc.automaticfoodfinder.views.SkeletonView
+            <com.randomappsinc.instafood.views.SkeletonView
                 android:layout_marginLeft="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="21dp"/>
         </LinearLayout>
 
-        <com.randomappsinc.automaticfoodfinder.views.SkeletonView
+        <com.randomappsinc.instafood.views.SkeletonView
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="90dp"/>
@@ -44,12 +44,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.randomappsinc.automaticfoodfinder.views.SkeletonView
+            <com.randomappsinc.instafood.views.SkeletonView
                 android:layout_width="115dp"
                 android:layout_height="21dp"
                 android:layout_gravity="start|center_vertical"/>
 
-            <com.randomappsinc.automaticfoodfinder.views.SkeletonView
+            <com.randomappsinc.instafood.views.SkeletonView
                 android:layout_width="130dp"
                 android:layout_height="19dp"
                 android:layout_gravity="end|center_vertical"/>

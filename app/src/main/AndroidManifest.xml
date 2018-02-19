@@ -2,13 +2,13 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.randomappsinc.automaticfoodfinder">
+    package="com.randomappsinc.instafood">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
-        android:name=".utils.MyApplication"
+        android:name="com.randomappsinc.instafood.utils.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -25,7 +25,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_api_key"/>
 
-        <activity android:name=".activities.MainActivity">
+        <activity android:name="com.randomappsinc.instafood.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -33,7 +33,7 @@
         </activity>
 
         <activity
-            android:name=".activities.PictureFullViewActivity"
+            android:name="com.randomappsinc.instafood.activities.PictureFullViewActivity"
             android:theme="@style/AppTheme.PictureFullView"
             android:configChanges="orientation|screenSize">
         </activity>
