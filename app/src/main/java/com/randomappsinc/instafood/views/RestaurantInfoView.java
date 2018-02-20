@@ -114,7 +114,7 @@ public class RestaurantInfoView {
         String distanceTemplate = PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
                 ? StringUtils.getString(R.string.miles_away)
                 : StringUtils.getString(R.string.kilometers_away);
-        String distanceText = String.format(distanceTemplate, restaurant.getDistance());
+        String distanceText = String.format(distanceTemplate, restaurant.getDistanceToShow());
         distance.setText(distanceText);
     }
 }

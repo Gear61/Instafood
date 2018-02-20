@@ -4,11 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.models.Restaurant;
-import com.randomappsinc.instafood.models.RestaurantCategory;
-import com.randomappsinc.instafood.persistence.PreferencesManager;
-import com.randomappsinc.instafood.utils.DistanceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,17 +107,9 @@ public class RestaurantSearchResults {
         private List<Category> categories;
 
         class Category {
-            @SerializedName("alias")
-            @Expose
-            private String alias;
-
             @SerializedName("title")
             @Expose
             private String title;
-
-            String getAlias() {
-                return alias;
-            }
 
             String getTitle() {
                 return title;
@@ -141,15 +129,10 @@ public class RestaurantSearchResults {
             restaurant.setAddress(location.getAddress());
             restaurant.setLatitude(coordinates.getLatitude());
             restaurant.setLongitude(coordinates.getLongitude());
-            restaurant.setDistance(PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
-                    ? DistanceUtils.getMilesFromMeters(distance)
-                    : DistanceUtils.getKilometersFromMeters(distance));
-            List<RestaurantCategory> restaurantCategories = new ArrayList<>();
+            restaurant.setDistance(distance);
+            ArrayList<String> restaurantCategories = new ArrayList<>();
             for (Category category : categories) {
-                RestaurantCategory restaurantCategory = new RestaurantCategory();
-                restaurantCategory.setAlias(category.getAlias());
-                restaurantCategory.setTitle(category.getTitle());
-                restaurantCategories.add(restaurantCategory);
+                restaurantCategories.add(category.getTitle());
             }
             restaurant.setCategories(restaurantCategories);
             return restaurant;

@@ -3,15 +3,15 @@ package com.randomappsinc.instafood.api.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class RestaurantPhotos {
 
     @SerializedName("photos")
     @Expose
-    private List<String> photoUrls;
+    private ArrayList<String> photoUrls;
 
-    public List<String> getPhotoUrls() {
+    public ArrayList<String> getPhotoUrls() {
         return photoUrls;
     }
 }

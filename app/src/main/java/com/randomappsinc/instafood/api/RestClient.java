@@ -16,8 +16,8 @@ import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import okhttp3.OkHttpClient;
@@ -32,11 +32,11 @@ public class RestClient {
     }
 
     public interface PhotosListener {
-        void onPhotosFetched(List<String> photos);
+        void onPhotosFetched(ArrayList<String> photos);
     }
 
     public interface ReviewsListener {
-        void onReviewsFetched(List<RestaurantReview> photos);
+        void onReviewsFetched(ArrayList<RestaurantReview> photos);
     }
 
     private static final RestaurantListener DUMMY_RESTAURANT_LISTENER = new RestaurantListener() {
@@ -46,12 +46,12 @@ public class RestClient {
 
     private static final PhotosListener DUMMY_PHOTOS_LISTENER = new PhotosListener() {
         @Override
-        public void onPhotosFetched(List<String> photos) {}
+        public void onPhotosFetched(ArrayList<String> photos) {}
     };
 
     private static final ReviewsListener DUMMY_REVIEWS_LISTENER = new ReviewsListener() {
         @Override
-        public void onReviewsFetched(List<RestaurantReview> reviews) {}
+        public void onReviewsFetched(ArrayList<RestaurantReview> reviews) {}
     };
 
     private static RestClient instance;
@@ -176,7 +176,7 @@ public class RestClient {
         photosListener = DUMMY_PHOTOS_LISTENER;
     }
 
-    public void processPhotos(List<String> photoUrls) {
+    public void processPhotos(ArrayList<String> photoUrls) {
         photosListener.onPhotosFetched(photoUrls);
     }
 
@@ -212,7 +212,7 @@ public class RestClient {
         reviewsListener = DUMMY_REVIEWS_LISTENER;
     }
 
-    public void processReviews(List<RestaurantReview> reviews) {
+    public void processReviews(ArrayList<RestaurantReview> reviews) {
         reviewsListener.onReviewsFetched(reviews);
     }
 

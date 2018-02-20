@@ -1,8 +1,15 @@
 package com.randomappsinc.instafood.models;
 
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Restaurant {
+import com.randomappsinc.instafood.constants.DistanceUnit;
+import com.randomappsinc.instafood.persistence.PreferencesManager;
+import com.randomappsinc.instafood.utils.DistanceUtils;
+
+import java.util.ArrayList;
+
+public class Restaurant implements Parcelable {
 
     private String yelpId;
     private String name;
@@ -15,11 +22,14 @@ public class Restaurant {
     private String address;
     private double latitute;
     private double longitude;
-    private List<RestaurantCategory> categories;
+    private ArrayList<String> categories;
+    private ArrayList<String> photoUrls;
+    private ArrayList<RestaurantReview> reviews;
 
-    // Distance between the place location and the user's current location in miles/kilometers
-    // Miles vs. kilometers is determined by the user's setting
-    private double mDistance;
+    public Restaurant() {}
+
+    // Distance between the place location and the user's current location in meters
+    private double distance;
 
     public String getId() {
         return yelpId;
@@ -109,26 +119,129 @@ public class Restaurant {
         this.longitude = longitude;
     }
 
-    public double getDistance() {
-        return mDistance;
-    }
-
     public void setDistance(double distance) {
-        mDistance = distance;
+        this.distance = distance;
     }
 
-    public void setCategories(List<RestaurantCategory> categories) {
+    public void setCategories(ArrayList<String> categories) {
         this.categories = categories;
+    }
+
+    public ArrayList<String> getPhotoUrls() {
+        return photoUrls;
+    }
+
+    public void setPhotoUrls(ArrayList<String> photoUrls) {
+        this.photoUrls = photoUrls;
+    }
+
+    public ArrayList<RestaurantReview> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(ArrayList<RestaurantReview> reviews) {
+        this.reviews = reviews;
+    }
+
+    public double getDistanceToShow() {
+        return PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
+                ? DistanceUtils.getMilesFromMeters(distance)
+                : DistanceUtils.getKilometersFromMeters(distance);
     }
 
     public String getCategoriesListText() {
         StringBuilder categoriesList = new StringBuilder();
-        for (RestaurantCategory category : categories) {
+        for (String category : categories) {
             if (categoriesList.length() > 0) {
                 categoriesList.append(", ");
             }
-            categoriesList.append(category.getTitle());
+            categoriesList.append(category);
         }
         return categoriesList.toString();
     }
+
+    protected Restaurant(Parcel in) {
+        yelpId = in.readString();
+        name = in.readString();
+        imageUrl = in.readString();
+        yelpUrl = in.readString();
+        rating = in.readDouble();
+        reviewCount = in.readInt();
+        phoneNumber = in.readString();
+        price = in.readString();
+        address = in.readString();
+        latitute = in.readDouble();
+        longitude = in.readDouble();
+        if (in.readByte() == 0x01) {
+            categories = new ArrayList<>();
+            in.readList(categories, String.class.getClassLoader());
+        } else {
+            categories = null;
+        }
+        if (in.readByte() == 0x01) {
+            photoUrls = new ArrayList<>();
+            in.readList(photoUrls, String.class.getClassLoader());
+        } else {
+            photoUrls = null;
+        }
+        if (in.readByte() == 0x01) {
+            reviews = new ArrayList<>();
+            in.readList(reviews, RestaurantReview.class.getClassLoader());
+        } else {
+            reviews = null;
+        }
+        distance = in.readDouble();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(yelpId);
+        dest.writeString(name);
+        dest.writeString(imageUrl);
+        dest.writeString(yelpUrl);
+        dest.writeDouble(rating);
+        dest.writeInt(reviewCount);
+        dest.writeString(phoneNumber);
+        dest.writeString(price);
+        dest.writeString(address);
+        dest.writeDouble(latitute);
+        dest.writeDouble(longitude);
+        if (categories == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(categories);
+        }
+        if (photoUrls == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(photoUrls);
+        }
+        if (reviews == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(reviews);
+        }
+        dest.writeDouble(distance);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Restaurant> CREATOR = new Parcelable.Creator<Restaurant>() {
+        @Override
+        public Restaurant createFromParcel(Parcel in) {
+            return new Restaurant(in);
+        }
+
+        @Override
+        public Restaurant[] newArray(int size) {
+            return new Restaurant[size];
+        }
+    };
 }

@@ -38,7 +38,6 @@ import com.randomappsinc.instafood.views.RestaurantInfoView;
 import com.squareup.seismic.ShakeDetector;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,11 +50,14 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
 
     private static final int FILTER_REQUEST_CODE = 1;
 
-    @BindView(R.id.parent) ScrollView parent;
+    private static final String RESTAURANT_KEY = "restaurant";
+    private static final String CURRENT_LOCATION_KEY = "currentLocation";
+
+    @BindView(R.id.homepage_scrollview) ScrollView parent;
     @BindView(R.id.restaurant_map) MapView restaurantMap;
     @BindView(R.id.restaurant_info_parent) View restaurantInfo;
     @BindView(R.id.photos_stub) View photosStub;
-    @BindView(R.id.restaurant_photos) RecyclerView photos;
+    @BindView(R.id.restaurant_photos) RecyclerView photosList;
     @BindView(R.id.reviews_stub) View reviewsStub;
     @BindView(R.id.reviews_container) LinearLayout reviewsContainer;
 
@@ -83,7 +85,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         restaurantMap.getMapAsync(this);
 
         photosAdapter = new RestaurantPhotosAdapter(this, this);
-        photos.setAdapter(photosAdapter);
+        photosList.setAdapter(photosAdapter);
         reviewsAdapter = new RestaurantReviewsAdapter(this);
 
         restClient = RestClient.getInstance();
@@ -95,6 +97,50 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
                 this,
                 restaurantInfo,
                 new IconDrawable(this, IoniconsIcons.ion_location).colorRes(R.color.dark_gray));
+
+        if (savedInstanceState != null) {
+            currentLocation = savedInstanceState.getString(CURRENT_LOCATION_KEY);
+            restaurant = savedInstanceState.getParcelable(RESTAURANT_KEY);
+            restaurantInfoView.loadRestaurant(restaurant);
+            if (googleMap != null) {
+                loadRestaurantLocationInMap();
+            }
+            if (restaurant.getPhotoUrls() != null) {
+                onPhotosFetched(restaurant.getPhotoUrls());
+            }
+            if (restaurant.getReviews() != null) {
+                onReviewsFetched(restaurant.getReviews());
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        restaurantMap.onSaveInstanceState(outState);
+
+        if (restaurant != null) {
+            outState.putParcelable(RESTAURANT_KEY, restaurant);
+            outState.putString(CURRENT_LOCATION_KEY, currentLocation);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        restaurantMap.onResume();
+
+        // Re-render distance text since they might have changed their distance setting
+        restaurantInfoView.renderDistanceText();
+
+        // Run this here instead of onCreate() to cover the case where they return from turning on location
+        if (currentLocation == null && !denialLock) {
+            locationManager.fetchCurrentLocation();
+        }
+
+        if (PreferencesManager.get().isShakeEnabled()) {
+            shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
+        }
     }
 
     @Override
@@ -108,9 +154,9 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
         googleMap.getUiSettings().setAllGesturesEnabled(false);
         googleMap.setOnMapClickListener(mapClickListener);
-        this.googleMap = googleMap;
         if (restaurant != null) {
             loadRestaurantLocationInMap();
         }
@@ -187,14 +233,16 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     }
 
     @Override
-    public void onPhotosFetched(List<String> photos) {
-        this.photosStub.setVisibility(View.INVISIBLE);
-        this.photosAdapter.setPhotoUrls(photos);
-        this.photos.setVisibility(View.VISIBLE);
+    public void onPhotosFetched(ArrayList<String> photos) {
+        restaurant.setPhotoUrls(photos);
+        photosStub.setVisibility(View.INVISIBLE);
+        photosAdapter.setPhotoUrls(photos);
+        photosList.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onReviewsFetched(List<RestaurantReview> reviews) {
+    public void onReviewsFetched(ArrayList<RestaurantReview> reviews) {
+        restaurant.setReviews(reviews);
         reviewsStub.setVisibility(View.GONE);
         reviewsContainer.setVisibility(View.VISIBLE);
         reviewsAdapter.setReviews(reviews, reviewsContainer, this);
@@ -213,7 +261,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
 
     private void turnOnSkeletonLoading() {
         restaurantInfoView.setSkeletonVisibility(true);
-        photos.setVisibility(View.INVISIBLE);
+        photosList.setVisibility(View.INVISIBLE);
         photosStub.setVisibility(View.VISIBLE);
         reviewsContainer.setVisibility(View.GONE);
         reviewsStub.setVisibility(View.VISIBLE);
@@ -291,30 +339,6 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         if (restaurant != null) {
             resetAndFindNewRestaurant();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        restaurantMap.onResume();
-
-        // Re-render distance text since they might have changed their distance setting
-        restaurantInfoView.renderDistanceText();
-
-        // Run this here instead of onCreate() to cover the case where they return from turning on location
-        if (currentLocation == null && !denialLock) {
-            locationManager.fetchCurrentLocation();
-        }
-
-        if (PreferencesManager.get().isShakeEnabled()) {
-            shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        restaurantMap.onSaveInstanceState(outState);
     }
 
     @Override

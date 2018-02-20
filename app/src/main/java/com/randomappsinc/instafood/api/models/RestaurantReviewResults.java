@@ -90,8 +90,8 @@ public class RestaurantReviewResults {
         }
     }
 
-    public List<RestaurantReview> getReviews() {
-        List<RestaurantReview> restaurantReviews = new ArrayList<>();
+    public ArrayList<RestaurantReview> getReviews() {
+        ArrayList<RestaurantReview> restaurantReviews = new ArrayList<>();
         for (RestaurantReviewResult reviewResult : reviews) {
             restaurantReviews.add(reviewResult.toRestaurantReview());
         }
