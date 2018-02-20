@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.models.Filter;
+import com.randomappsinc.instafood.utils.DeviceUtils;
 import com.randomappsinc.instafood.utils.DistanceUtils;
 import com.randomappsinc.instafood.utils.MyApplication;
 
@@ -76,6 +77,11 @@ public class PreferencesManager {
     }
 
     public boolean isShakeEnabled() {
-        return prefs.getBoolean(SHAKE_ENABLED, true);
+        return prefs.getBoolean(SHAKE_ENABLED, getDefaultShakeValue());
+    }
+
+    private boolean getDefaultShakeValue() {
+        // Turn off shake by default for Samsung Galaxy S3, since it doesn't hook into sensor APIs properly
+        return !DeviceUtils.getDeviceName().equals("Samsung SAMSUNG-SGH-I747");
     }
 }
