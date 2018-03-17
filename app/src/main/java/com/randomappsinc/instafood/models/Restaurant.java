@@ -20,7 +20,7 @@ public class Restaurant implements Parcelable {
     private String phoneNumber;
     private String price;
     private String address;
-    private double latitute;
+    private double latitude;
     private double longitude;
     private ArrayList<String> categories;
     private ArrayList<String> photoUrls;
@@ -104,11 +104,11 @@ public class Restaurant implements Parcelable {
     }
 
     public double getLatitude() {
-        return latitute;
+        return latitude;
     }
 
     public void setLatitude(double latitude) {
-        latitute = latitude;
+        this.latitude = latitude;
     }
 
     public double getLongitude() {
@@ -170,7 +170,7 @@ public class Restaurant implements Parcelable {
         phoneNumber = in.readString();
         price = in.readString();
         address = in.readString();
-        latitute = in.readDouble();
+        latitude = in.readDouble();
         longitude = in.readDouble();
         if (in.readByte() == 0x01) {
             categories = new ArrayList<>();
@@ -209,7 +209,7 @@ public class Restaurant implements Parcelable {
         dest.writeString(phoneNumber);
         dest.writeString(price);
         dest.writeString(address);
-        dest.writeDouble(latitute);
+        dest.writeDouble(latitude);
         dest.writeDouble(longitude);
         if (categories == null) {
             dest.writeByte((byte) (0x00));
