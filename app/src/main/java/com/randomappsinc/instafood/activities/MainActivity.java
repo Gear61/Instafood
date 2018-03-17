@@ -101,6 +101,11 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         if (savedInstanceState != null) {
             currentLocation = savedInstanceState.getString(CURRENT_LOCATION_KEY);
             restaurant = savedInstanceState.getParcelable(RESTAURANT_KEY);
+
+            if (restaurant == null) {
+                return;
+            }
+
             restaurantInfoView.loadRestaurant(restaurant);
             if (googleMap != null) {
                 loadRestaurantLocationInMap();

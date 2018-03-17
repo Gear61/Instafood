@@ -51,6 +51,7 @@ public class FindRestaurantsCallback implements Callback<RestaurantSearchResults
                     int randomIndex = random.nextInt(freshRestaurants.size());
                     chosenOne = freshRestaurants.get(randomIndex);
                 }
+
                 RestClient.getInstance().processRestaurant(chosenOne);
                 RestClient.getInstance().fetchRestaurantPhotos(chosenOne);
                 RestClient.getInstance().fetchRestaurantReviews(chosenOne);
