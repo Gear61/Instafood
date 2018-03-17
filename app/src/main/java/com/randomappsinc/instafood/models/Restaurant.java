@@ -3,9 +3,11 @@ package com.randomappsinc.instafood.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
 import com.randomappsinc.instafood.utils.DistanceUtils;
+import com.randomappsinc.instafood.utils.StringUtils;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,7 @@ public class Restaurant implements Parcelable {
     private String phoneNumber;
     private String price;
     private String address;
+    private String fullAddress;
     private double latitude;
     private double longitude;
     private ArrayList<String> categories;
@@ -53,10 +56,6 @@ public class Restaurant implements Parcelable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public String getUrl() {
-        return yelpUrl;
     }
 
     public void setUrl(String url) {
@@ -101,6 +100,10 @@ public class Restaurant implements Parcelable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
     }
 
     public double getLatitude() {
@@ -160,6 +163,25 @@ public class Restaurant implements Parcelable {
         return categoriesList.toString();
     }
 
+    public String getShareText() {
+        String template = StringUtils.getString(R.string.share_template);
+        return String.format(
+                template,
+                name,
+                getRatingShareText(),
+                fullAddress,
+                getCategoriesListText(),
+                phoneNumber,
+                yelpUrl);
+    }
+
+    private String getRatingShareText() {
+        String reviewText = reviewCount == 1
+                ? StringUtils.getString(R.string.one_review)
+                : String.format(StringUtils.getString(R.string.num_reviews), reviewCount);
+        return String.valueOf(rating) + "/5 (" + reviewText + ")";
+    }
+
     protected Restaurant(Parcel in) {
         yelpId = in.readString();
         name = in.readString();
@@ -170,6 +192,7 @@ public class Restaurant implements Parcelable {
         phoneNumber = in.readString();
         price = in.readString();
         address = in.readString();
+        fullAddress = in.readString();
         latitude = in.readDouble();
         longitude = in.readDouble();
         if (in.readByte() == 0x01) {
@@ -209,6 +232,7 @@ public class Restaurant implements Parcelable {
         dest.writeString(phoneNumber);
         dest.writeString(price);
         dest.writeString(address);
+        dest.writeString(fullAddress);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
         if (categories == null) {

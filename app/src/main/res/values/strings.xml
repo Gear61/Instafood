@@ -34,4 +34,9 @@
     <string name="restaurant_call_bad_result">
         We were unable to find a restaurant for you. Please try again later.
     </string>
+
+    <string name="share_restaurant_with">Share restaurant info with</string>
+    <string name="share_template">
+        Hey, check out this awesome restaurant I found on Instafood!\n\nName: %1$s\nRating: %2$s\nAddress: %3$s\nFood type: %4$s\nPhone number: %5$s\n\n%6$s
+    </string>
 </resources>

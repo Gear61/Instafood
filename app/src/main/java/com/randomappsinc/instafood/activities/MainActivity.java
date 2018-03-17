@@ -229,8 +229,9 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         }
 
         Intent shareIntent = ShareCompat.IntentBuilder.from(this)
+                .setChooserTitle(R.string.share_restaurant_with)
                 .setType("text/plain")
-                .setText(restaurant.getUrl())
+                .setText(restaurant.getShareText())
                 .getIntent();
         if (shareIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(shareIntent);

@@ -83,6 +83,10 @@ public class RestaurantSearchResults {
             @Expose
             private String city;
 
+            @SerializedName("display_address")
+            @Expose
+            private List<String> displayAddress;
+
             String getCity() {
                 return city;
             }
@@ -93,6 +97,17 @@ public class RestaurantSearchResults {
                     address.append(address1).append(", ");
                 }
                 address.append(city);
+                return address.toString();
+            }
+
+            String getFullAddress() {
+                StringBuilder address = new StringBuilder();
+                for (String line : displayAddress) {
+                    if (address.length() > 0) {
+                        address.append(", ");
+                    }
+                    address.append(line);
+                }
                 return address.toString();
             }
         }
@@ -127,6 +142,7 @@ public class RestaurantSearchResults {
             restaurant.setPhoneNumber(phoneNumber);
             restaurant.setPrice(price);
             restaurant.setAddress(location.getAddress());
+            restaurant.setFullAddress(location.getFullAddress());
             restaurant.setLatitude(coordinates.getLatitude());
             restaurant.setLongitude(coordinates.getLongitude());
             restaurant.setDistance(distance);
