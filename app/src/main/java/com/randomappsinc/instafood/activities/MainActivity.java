@@ -150,6 +150,8 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
 
     @Override
     public void onRestaurantFetched(Restaurant restaurant) {
+        parent.fullScroll(ScrollView.FOCUS_UP);
+
         this.restaurant = restaurant;
         this.restaurantInfoView.loadRestaurant(restaurant);
         if (googleMap != null) {
@@ -258,7 +260,6 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         if (currentLocation == null) {
             locationManager.fetchCurrentLocation();
         } else {
-            parent.fullScroll(ScrollView.FOCUS_UP);
             restaurant = null;
             restClient.findRestaurant(currentLocation);
             turnOnSkeletonLoading();
