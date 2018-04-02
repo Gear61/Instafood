@@ -8,12 +8,20 @@ import android.support.annotation.NonNull;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.utils.PermissionUtils;
 import com.randomappsinc.instafood.utils.UIUtils;
-
-import io.nlopez.smartlocation.OnLocationUpdatedListener;
-import io.nlopez.smartlocation.SmartLocation;
 
 public class LocationManager implements LocationForm.Listener {
 
@@ -21,18 +29,32 @@ public class LocationManager implements LocationForm.Listener {
     public static final int LOCATION_SERVICES_CODE = 350;
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 9001;
 
+    private static final long DESIRED_LOCATION_TURNAROUND = 1000L;
+
     public interface Listener {
         void onLocationFetched(String location);
 
         void onServicesOrPermissionChoice();
     }
 
+    private final Handler locationChecker = new Handler();
+    private final Runnable locationCheckTask = new Runnable() {
+        @Override
+        public void run() {
+            stopFetchingCurrentLocation();
+            if (!locationFetched) {
+                onLocationFetchFail();
+            }
+        }
+    };
+
     @NonNull private Listener listener;
     @NonNull private Activity activity;
 
+    private FusedLocationProviderClient locationFetcher;
+    private LocationRequest locationRequest;
     private boolean locationFetched;
-    private Handler locationChecker;
-    private Runnable locationCheckTask;
+
     private LocationServicesManager locationServicesManager;
     private MaterialDialog locationDenialDialog;
     private MaterialDialog locationPermissionDialog;
@@ -46,17 +68,6 @@ public class LocationManager implements LocationForm.Listener {
 
     private void initNonContext() {
         locationServicesManager = new LocationServicesManager(activity);
-        locationChecker = new Handler();
-        locationCheckTask = new Runnable() {
-            @Override
-            public void run() {
-                SmartLocation.with(activity).location().stop();
-                if (!locationFetched) {
-                    UIUtils.showLongToast(R.string.auto_location_fail);
-                }
-            }
-        };
-
         locationForm = new LocationForm(activity, this);
         locationDenialDialog = new MaterialDialog.Builder(activity)
                 .cancelable(false)
@@ -101,6 +112,12 @@ public class LocationManager implements LocationForm.Listener {
                     }
                 })
                 .build();
+
+        locationFetcher = LocationServices.getFusedLocationProviderClient(activity);
+        locationRequest = LocationRequest.create()
+                .setInterval(DESIRED_LOCATION_TURNAROUND)
+                .setFastestInterval(DESIRED_LOCATION_TURNAROUND)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     @Override
@@ -111,14 +128,33 @@ public class LocationManager implements LocationForm.Listener {
 
     public void fetchCurrentLocation() {
         if (PermissionUtils.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            if (SmartLocation.with(activity).location().state().locationServicesEnabled()) {
-                fetchAutomaticLocation();
-            } else {
-                locationServicesManager.askForLocationServices(LOCATION_SERVICES_CODE);
-            }
+            checkLocationServicesAndFetchLocationIfOn();
         } else {
             requestLocationPermission();
         }
+    }
+
+    private void checkLocationServicesAndFetchLocationIfOn() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        SettingsClient client = LocationServices.getSettingsClient(activity);
+        client.checkLocationSettings(builder.build())
+                .addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        fetchAutomaticLocation();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        if (exception instanceof ResolvableApiException) {
+                            locationServicesManager.askForLocationServices(LOCATION_SERVICES_CODE);
+                        } else {
+                            onLocationFetchFail();
+                        }
+                    }
+                });
     }
 
     private void requestLocationPermission() {
@@ -130,25 +166,31 @@ public class LocationManager implements LocationForm.Listener {
 
     public void fetchAutomaticLocation() {
         locationFetched = false;
-        SmartLocation.with(activity).location()
-                .oneFix()
-                .start(new OnLocationUpdatedListener() {
-                    @Override
-                    public void onLocationUpdated(Location location) {
-                        locationChecker.removeCallbacks(locationCheckTask);
-                        locationFetched = true;
-                        String currentLocation = String.valueOf(location.getLatitude())
-                                + ", "
-                                + String.valueOf(location.getLongitude());
-                        listener.onLocationFetched(currentLocation);
-                    }
-                });
-        locationChecker.postDelayed(locationCheckTask, 10000L);
+        try {
+            locationFetcher.requestLocationUpdates(locationRequest, locationCallback, null);
+        } catch (SecurityException exception) {
+            requestLocationPermission();
+        }
     }
+
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            if (locationResult != null) {
+                stopFetchingCurrentLocation();
+                locationFetched = true;
+                Location location = locationResult.getLastLocation();
+                listener.onLocationFetched(
+                        String.valueOf(location.getLatitude())
+                                + ", "
+                                + String.valueOf(location.getLongitude()));
+            }
+        }
+    };
 
     private void stopFetchingCurrentLocation() {
         locationChecker.removeCallbacks(locationCheckTask);
-        SmartLocation.with(activity).location().stop();
+        locationFetcher.removeLocationUpdates(locationCallback);
     }
 
     public void showLocationDenialDialog() {
@@ -157,5 +199,9 @@ public class LocationManager implements LocationForm.Listener {
 
     public void showLocationPermissionDialog() {
         locationPermissionDialog.show();
+    }
+
+    private void onLocationFetchFail() {
+        UIUtils.showLongToast(R.string.auto_location_fail);
     }
 }

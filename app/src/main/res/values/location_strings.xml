@@ -22,7 +22,7 @@
 
     <string name="location_permission_needed">Location Permission Needed</string>
     <string name="location_permission_denial">
-        Instafood needs permission to access your current location to find places and events near you.
+        Instafood needs permission to access your current location to find restaurants near you.
     </string>
     <string name="give_location_permission">Give us location permission</string>
 
