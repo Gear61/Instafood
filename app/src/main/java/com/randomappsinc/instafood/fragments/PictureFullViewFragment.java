@@ -1,8 +1,9 @@
 package com.randomappsinc.instafood.fragments;
 
-import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,21 +47,28 @@ public class PictureFullViewFragment extends Fragment {
     @BindView(R.id.parent) View parent;
     @BindView(R.id.picture) ImageView picture;
 
-    private Unbinder mUnbinder;
+    private Unbinder unbinder;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.picture_full_view_fragment, container, false);
-        mUnbinder = ButterKnife.bind(this, rootView);
+        unbinder = ButterKnife.bind(this, rootView);
 
-        Drawable defaultThumbnail = new IconDrawable(getActivity(), IoniconsIcons.ion_image).colorRes(R.color.dark_gray);
-        String imageUrl = getArguments().getString(IMAGE_URL_KEY);
-        Picasso.with(getActivity())
-                .load(imageUrl)
-                .error(defaultThumbnail)
-                .fit()
-                .centerInside()
-                .into(picture, mImageLoadingCallback);
+        Drawable defaultThumbnail = new IconDrawable(
+                getActivity(),
+                IoniconsIcons.ion_image).colorRes(R.color.dark_gray);
+
+        if (getArguments() != null) {
+            String imageUrl = getArguments().getString(IMAGE_URL_KEY);
+            Picasso.with(getActivity())
+                    .load(imageUrl)
+                    .error(defaultThumbnail)
+                    .fit()
+                    .centerInside()
+                    .into(picture, mImageLoadingCallback);
+        } else {
+            throw new IllegalArgumentException("Started full view without a picture to load");
+        }
 
         return rootView;
     }
@@ -68,6 +76,6 @@ public class PictureFullViewFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
+        unbinder.unbind();
     }
 }
