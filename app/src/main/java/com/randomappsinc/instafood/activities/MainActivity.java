@@ -151,6 +151,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     @Override
     public void onRestaurantFetched(Restaurant restaurant) {
         parent.fullScroll(ScrollView.FOCUS_UP);
+        photosList.smoothScrollToPosition(0);
 
         this.restaurant = restaurant;
         this.restaurantInfoView.loadRestaurant(restaurant);
