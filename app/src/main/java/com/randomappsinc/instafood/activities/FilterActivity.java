@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.randomappsinc.instafood.R;
+import com.randomappsinc.instafood.api.RestaurantFetcher;
 import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.models.Filter;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
@@ -104,6 +105,8 @@ public class FilterActivity extends AppCompatActivity {
 
     @OnClick(R.id.apply_filter)
     public void applyFilter() {
+        RestaurantFetcher.getInstance().clearRestaurants();
+
         double sliderVal = radiusSlider.getProgress();
         double distanceValue = (sliderVal + 1) / 10;
 

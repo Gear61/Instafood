@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.randomappsinc.instafood.api.ApiConstants;
 import com.randomappsinc.instafood.api.RestClient;
+import com.randomappsinc.instafood.api.RestaurantFetcher;
 import com.randomappsinc.instafood.api.models.BusinessInfoFetchError;
 import com.randomappsinc.instafood.api.models.RestaurantReviewResults;
 import com.randomappsinc.instafood.models.RestaurantReview;
@@ -23,7 +24,7 @@ public class FetchReviewsCallback implements Callback<RestaurantReviewResults> {
     @Override
     public void onResponse(@NonNull Call<RestaurantReviewResults> call, @NonNull Response<RestaurantReviewResults> response) {
         if (response.code() == ApiConstants.HTTP_STATUS_OK) {
-            RestClient.getInstance().processReviews(response.body().getReviews());
+            RestaurantFetcher.getInstance().onReviewsFetched(response.body().getReviews());
         } else if (response.code() == ApiConstants.HTTP_STATUS_FORBIDDEN) {
             Converter<ResponseBody, BusinessInfoFetchError> errorConverter =
                     RestClient.getInstance().getRetrofitInstance()
@@ -31,7 +32,7 @@ public class FetchReviewsCallback implements Callback<RestaurantReviewResults> {
             try {
                 BusinessInfoFetchError error = errorConverter.convert(response.errorBody());
                 if (error.getCode().equals(ApiConstants.BUSINESS_UNAVAILABLE)) {
-                    RestClient.getInstance().processReviews(new ArrayList<RestaurantReview>());
+                    RestaurantFetcher.getInstance().onReviewsFetched(new ArrayList<RestaurantReview>());
                 }
             } catch (IOException ignored) {}
         }

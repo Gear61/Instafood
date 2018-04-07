@@ -2,8 +2,6 @@ package com.randomappsinc.instafood.api;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.randomappsinc.instafood.api.callbacks.FetchPhotosCallback;
 import com.randomappsinc.instafood.api.callbacks.FetchReviewsCallback;
@@ -13,12 +11,7 @@ import com.randomappsinc.instafood.api.models.RestaurantReviewResults;
 import com.randomappsinc.instafood.api.models.RestaurantSearchResults;
 import com.randomappsinc.instafood.models.Filter;
 import com.randomappsinc.instafood.models.Restaurant;
-import com.randomappsinc.instafood.models.RestaurantReview;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -27,50 +20,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestClient {
 
-    public interface RestaurantListener {
-        void onRestaurantFetched(Restaurant restaurant);
-    }
-
-    public interface PhotosListener {
-        void onPhotosFetched(ArrayList<String> photos);
-    }
-
-    public interface ReviewsListener {
-        void onReviewsFetched(ArrayList<RestaurantReview> photos);
-    }
-
-    private static final RestaurantListener DUMMY_RESTAURANT_LISTENER = new RestaurantListener() {
-        @Override
-        public void onRestaurantFetched(@Nullable Restaurant restaurant) {}
-    };
-
-    private static final PhotosListener DUMMY_PHOTOS_LISTENER = new PhotosListener() {
-        @Override
-        public void onPhotosFetched(ArrayList<String> photos) {}
-    };
-
-    private static final ReviewsListener DUMMY_REVIEWS_LISTENER = new ReviewsListener() {
-        @Override
-        public void onReviewsFetched(ArrayList<RestaurantReview> reviews) {}
-    };
-
     private static RestClient instance;
 
     private Retrofit retrofit;
     private YelpService yelpService;
     private Handler handler;
-    private Set<String> alreadyVisitedRestaurants;
 
-    // Restaurants
-    @NonNull private RestaurantListener restaurantListener = DUMMY_RESTAURANT_LISTENER;
     private Call<RestaurantSearchResults> currentFindRestaurantsCall;
-
-    // Photos
-    @NonNull private PhotosListener photosListener = DUMMY_PHOTOS_LISTENER;
     private Call<RestaurantPhotos> currentFetchPhotosCall;
-
-    // Reviews
-    @NonNull private ReviewsListener reviewsListener = DUMMY_REVIEWS_LISTENER;
     private Call<RestaurantReviewResults> currentFetchReviewsCall;
 
     public static RestClient getInstance() {
@@ -96,26 +53,18 @@ public class RestClient {
         HandlerThread backgroundThread = new HandlerThread("");
         backgroundThread.start();
         handler = new Handler(backgroundThread.getLooper());
-
-        alreadyVisitedRestaurants = new HashSet<>();
     }
 
     public Retrofit getRetrofitInstance() {
         return retrofit;
     }
 
-    public void findRestaurant(final String location) {
+    void findRestaurants(final String location) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 if (currentFindRestaurantsCall != null) {
                     currentFindRestaurantsCall.cancel();
-                }
-                if (currentFetchPhotosCall != null) {
-                    currentFetchPhotosCall.cancel();
-                }
-                if (currentFetchReviewsCall != null) {
-                    currentFetchReviewsCall.cancel();
                 }
                 Filter filter = PreferencesManager.get().getFilter();
                 currentFindRestaurantsCall = yelpService.findRestaurants(
@@ -126,25 +75,12 @@ public class RestClient {
                         (int) filter.getRadius(),
                         filter.getPriceRangesString(),
                         filter.getAttributesString());
-                currentFindRestaurantsCall.enqueue(new FindRestaurantsCallback(alreadyVisitedRestaurants));
+                currentFindRestaurantsCall.enqueue(new FindRestaurantsCallback());
             }
         });
     }
 
-    public void registerRestaurantListener(RestaurantListener restaurantsListener) {
-        this.restaurantListener = restaurantsListener;
-    }
-
-    public void unregisterRestaurantListener() {
-        restaurantListener = DUMMY_RESTAURANT_LISTENER;
-    }
-
-    public void processRestaurant(Restaurant restaurant) {
-        alreadyVisitedRestaurants.add(restaurant.getId());
-        restaurantListener.onRestaurantFetched(restaurant);
-    }
-
-    public void cancelRestaurantFetch() {
+    void cancelRestaurantFetch() {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -155,32 +91,17 @@ public class RestClient {
         });
     }
 
-    public void fetchRestaurantPhotos(final Restaurant restaurant) {
+    void fetchRestaurantPhotos(final Restaurant restaurant) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if (currentFetchPhotosCall != null) {
-                    currentFetchPhotosCall.cancel();
-                }
                 currentFetchPhotosCall = yelpService.fetchRestaurantPhotos(restaurant.getId());
                 currentFetchPhotosCall.enqueue(new FetchPhotosCallback());
             }
         });
     }
 
-    public void registerPhotosListener(PhotosListener photosListener) {
-        this.photosListener = photosListener;
-    }
-
-    public void unregisterPhotosListener() {
-        photosListener = DUMMY_PHOTOS_LISTENER;
-    }
-
-    public void processPhotos(ArrayList<String> photoUrls) {
-        photosListener.onPhotosFetched(photoUrls);
-    }
-
-    public void cancelPhotosFetch() {
+    void cancelPhotosFetch() {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -191,32 +112,17 @@ public class RestClient {
         });
     }
 
-    public void fetchRestaurantReviews(final Restaurant restaurant) {
+    void fetchRestaurantReviews(final Restaurant restaurant) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if (currentFetchReviewsCall != null) {
-                    currentFetchReviewsCall.cancel();
-                }
                 currentFetchReviewsCall = yelpService.fetchRestaurantReviews(restaurant.getId());
                 currentFetchReviewsCall.enqueue(new FetchReviewsCallback());
             }
         });
     }
 
-    public void registerReviewsListener(ReviewsListener reviewsListener) {
-        this.reviewsListener = reviewsListener;
-    }
-
-    public void unregisterReviewsListener() {
-        reviewsListener = DUMMY_REVIEWS_LISTENER;
-    }
-
-    public void processReviews(ArrayList<RestaurantReview> reviews) {
-        reviewsListener.onReviewsFetched(reviews);
-    }
-
-    public void cancelReviewsFetch() {
+    void cancelReviewsFetch() {
         handler.post(new Runnable() {
             @Override
             public void run() {

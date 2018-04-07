@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.randomappsinc.instafood.api.ApiConstants;
 import com.randomappsinc.instafood.api.RestClient;
+import com.randomappsinc.instafood.api.RestaurantFetcher;
 import com.randomappsinc.instafood.api.models.BusinessInfoFetchError;
 import com.randomappsinc.instafood.api.models.RestaurantPhotos;
 
@@ -22,7 +23,7 @@ public class FetchPhotosCallback implements Callback<RestaurantPhotos> {
     @Override
     public void onResponse(@NonNull Call<RestaurantPhotos> call, @NonNull Response<RestaurantPhotos> response) {
         if (response.code() == ApiConstants.HTTP_STATUS_OK) {
-            RestClient.getInstance().processPhotos(response.body().getPhotoUrls());
+            RestaurantFetcher.getInstance().onPhotosFetched(response.body().getPhotoUrls());
         } else if (response.code() == ApiConstants.HTTP_STATUS_FORBIDDEN) {
             Converter<ResponseBody, BusinessInfoFetchError> errorConverter =
                     RestClient.getInstance().getRetrofitInstance()
@@ -30,7 +31,7 @@ public class FetchPhotosCallback implements Callback<RestaurantPhotos> {
             try {
                 BusinessInfoFetchError error = errorConverter.convert(response.errorBody());
                 if (error.getCode().equals(ApiConstants.BUSINESS_UNAVAILABLE)) {
-                    RestClient.getInstance().processPhotos(new ArrayList<String>());
+                    RestaurantFetcher.getInstance().onPhotosFetched(new ArrayList<String>());
                 }
             } catch (IOException ignored) {}
         }

@@ -28,7 +28,7 @@ import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.adapters.RestaurantPhotosAdapter;
 import com.randomappsinc.instafood.adapters.RestaurantReviewsAdapter;
-import com.randomappsinc.instafood.api.RestClient;
+import com.randomappsinc.instafood.api.RestaurantFetcher;
 import com.randomappsinc.instafood.location.LocationManager;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
@@ -43,8 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends StandardActivity implements RestClient.PhotosListener,
-        RestClient.RestaurantListener, RestClient.ReviewsListener, RestaurantReviewsAdapter.Listener,
+public class MainActivity extends StandardActivity implements RestaurantReviewsAdapter.Listener,
         RestaurantPhotosAdapter.Listener, OnMapReadyCallback, LocationManager.Listener,
         ShakeDetector.Listener {
 
@@ -61,9 +60,9 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     @BindView(R.id.reviews_stub) View reviewsStub;
     @BindView(R.id.reviews_container) LinearLayout reviewsContainer;
 
+    private RestaurantFetcher restaurantFetcher;
     private Restaurant restaurant;
     private RestaurantInfoView restaurantInfoView;
-    private RestClient restClient;
     private RestaurantPhotosAdapter photosAdapter;
     private RestaurantReviewsAdapter reviewsAdapter;
     private GoogleMap googleMap;
@@ -88,11 +87,6 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         photosList.setAdapter(photosAdapter);
         reviewsAdapter = new RestaurantReviewsAdapter(this);
 
-        restClient = RestClient.getInstance();
-        restClient.registerRestaurantListener(this);
-        restClient.registerPhotosListener(this);
-        restClient.registerReviewsListener(this);
-
         restaurantInfoView = new RestaurantInfoView(
                 this,
                 restaurantInfo,
@@ -106,17 +100,17 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
                 return;
             }
 
-            restaurantInfoView.loadRestaurant(restaurant);
-            if (googleMap != null) {
-                loadRestaurantLocationInMap();
-            }
+            restaurantInfoListener.onRestaurantFetched(restaurant);
             if (restaurant.getPhotoUrls() != null) {
-                onPhotosFetched(restaurant.getPhotoUrls());
+                restaurantInfoListener.onPhotosFetched(restaurant.getPhotoUrls());
             }
             if (restaurant.getReviews() != null) {
-                onReviewsFetched(restaurant.getReviews());
+                restaurantInfoListener.onReviewsFetched(restaurant.getReviews());
             }
         }
+
+        restaurantFetcher = RestaurantFetcher.getInstance();
+        restaurantFetcher.setListener(restaurantInfoListener);
     }
 
     @Override
@@ -148,17 +142,35 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         }
     }
 
-    @Override
-    public void onRestaurantFetched(Restaurant restaurant) {
-        parent.fullScroll(ScrollView.FOCUS_UP);
-        photosList.smoothScrollToPosition(0);
+    private final RestaurantFetcher.Listener restaurantInfoListener = new RestaurantFetcher.Listener() {
+        @Override
+        public void onRestaurantFetched(Restaurant freshRestaurant) {
+            parent.fullScroll(ScrollView.FOCUS_UP);
+            photosList.smoothScrollToPosition(0);
 
-        this.restaurant = restaurant;
-        this.restaurantInfoView.loadRestaurant(restaurant);
-        if (googleMap != null) {
-            loadRestaurantLocationInMap();
+            restaurant = freshRestaurant;
+            restaurantInfoView.loadRestaurant(restaurant);
+            if (googleMap != null) {
+                loadRestaurantLocationInMap();
+            }
         }
-    }
+
+        @Override
+        public void onPhotosFetched(ArrayList<String> freshPhotos) {
+            restaurant.setPhotoUrls(freshPhotos);
+            photosStub.setVisibility(View.INVISIBLE);
+            photosAdapter.setPhotoUrls(freshPhotos);
+            photosList.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onReviewsFetched(ArrayList<RestaurantReview> freshReviews) {
+            restaurant.setReviews(freshReviews);
+            reviewsStub.setVisibility(View.GONE);
+            reviewsContainer.setVisibility(View.VISIBLE);
+            reviewsAdapter.setReviews(freshReviews, reviewsContainer, MainActivity.this);
+        }
+    };
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -241,34 +253,18 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         }
     }
 
-    @Override
-    public void onPhotosFetched(ArrayList<String> photos) {
-        restaurant.setPhotoUrls(photos);
-        photosStub.setVisibility(View.INVISIBLE);
-        photosAdapter.setPhotoUrls(photos);
-        photosList.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onReviewsFetched(ArrayList<RestaurantReview> reviews) {
-        restaurant.setReviews(reviews);
-        reviewsStub.setVisibility(View.GONE);
-        reviewsContainer.setVisibility(View.VISIBLE);
-        reviewsAdapter.setReviews(reviews, reviewsContainer, this);
-    }
-
     private void resetAndFindNewRestaurant() {
         if (currentLocation == null) {
             locationManager.fetchCurrentLocation();
         } else {
             restaurant = null;
-            restClient.findRestaurant(currentLocation);
-            turnOnSkeletonLoading();
+            turnOnSkeletonLoading(restaurantFetcher.canReturnRestaurantImmediately());
+            restaurantFetcher.fetchRestaurant();
         }
     }
 
-    private void turnOnSkeletonLoading() {
-        restaurantInfoView.setSkeletonVisibility(true);
+    private void turnOnSkeletonLoading(boolean restaurantInfoIncluded) {
+        restaurantInfoView.setSkeletonVisibility(restaurantInfoIncluded);
         photosList.setVisibility(View.INVISIBLE);
         photosStub.setVisibility(View.VISIBLE);
         reviewsContainer.setVisibility(View.GONE);
@@ -334,7 +330,8 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
         }
 
         currentLocation = location;
-        restClient.findRestaurant(currentLocation);
+        restaurantFetcher.setLocation(location);
+        restaurantFetcher.fetchRestaurant();
     }
 
     @Override
@@ -381,18 +378,7 @@ public class MainActivity extends StandardActivity implements RestClient.PhotosL
     public void onDestroy() {
         super.onDestroy();
         restaurantMap.onDestroy();
-
-        // Stop listening for restaurant results
-        restClient.cancelRestaurantFetch();
-        restClient.unregisterRestaurantListener();
-
-        // Stop listening for photo fetch results
-        restClient.cancelPhotosFetch();
-        restClient.unregisterPhotosListener();
-
-        // Stop listening for review fetch results
-        restClient.cancelReviewsFetch();
-        restClient.unregisterReviewsListener();
+        restaurantFetcher.clearEverything();
     }
 
     @Override
