@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.randomappsinc.instafood.models.Restaurant;
+import com.randomappsinc.instafood.persistence.PreferencesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +118,10 @@ public class RestaurantSearchResults {
         @Expose
         private double distance;
 
+        public double getDistance() {
+            return distance;
+        }
+
         @SerializedName("categories")
         @Expose
         private List<Category> categories;
@@ -156,9 +161,14 @@ public class RestaurantSearchResults {
     }
 
     public List<Restaurant> getRestaurants() {
+        double filterDistance = PreferencesManager.get().getFilter().getRadius();
+
         List<Restaurant> restaurants = new ArrayList<>();
         for (Business business : businesses) {
-            restaurants.add(business.toRestaurant());
+            // Filter out restaurants that are super far away, because Yelp API refuses to return empty lists
+            if (business.getDistance() <= filterDistance) {
+                restaurants.add(business.toRestaurant());
+            }
         }
         return restaurants;
     }
