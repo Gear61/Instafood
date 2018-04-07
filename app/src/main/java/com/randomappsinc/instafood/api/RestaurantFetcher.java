@@ -56,6 +56,9 @@ public class RestaurantFetcher {
     }
 
     public void fetchRestaurant() {
+        restClient.cancelPhotosFetch();
+        restClient.cancelReviewsFetch();
+
         if (restaurantPool.isEmpty()) {
             restClient.findRestaurants(location);
         } else {
