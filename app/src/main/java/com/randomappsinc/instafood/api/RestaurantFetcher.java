@@ -1,6 +1,8 @@
 package com.randomappsinc.instafood.api;
 
 
+import android.os.Bundle;
+
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
 
@@ -11,6 +13,8 @@ import java.util.Random;
 
 /** Utility class to fetch restaurant info, so UI pieces don't need to do any networking **/
 public class RestaurantFetcher {
+
+    private static final String CURRENT_LOCATION_KEY = "currentLocation";
 
     public interface Listener {
         void onRestaurantFetched(Restaurant newRestaurant);
@@ -45,6 +49,10 @@ public class RestaurantFetcher {
 
     public void setListener(Listener listener) {
         this.listener = listener;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public void setLocation(String location) {
@@ -101,6 +109,14 @@ public class RestaurantFetcher {
 
     public void onReviewsFetched(ArrayList<RestaurantReview> reviews) {
         listener.onReviewsFetched(reviews);
+    }
+
+    public void persistState(Bundle outState) {
+        outState.putString(CURRENT_LOCATION_KEY, location);
+    }
+
+    public void extractState(Bundle savedInstanceState) {
+        location = savedInstanceState.getString(CURRENT_LOCATION_KEY);
     }
 
     public void clearEverything() {

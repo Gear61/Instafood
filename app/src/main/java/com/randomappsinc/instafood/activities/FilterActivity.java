@@ -2,9 +2,11 @@ package com.randomappsinc.instafood.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,9 +26,12 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 public class FilterActivity extends AppCompatActivity {
 
+    @BindView(R.id.search_term) EditText searchTerm;
+    @BindView(R.id.clear_search) View clearSearch;
     @BindView(R.id.filter_content) View filterContent;
     @BindView(R.id.radius_slider) SeekBar radiusSlider;
     @BindView(R.id.radius_text) TextView distanceText;
@@ -100,6 +105,16 @@ public class FilterActivity extends AppCompatActivity {
 
         priceRangePickerView.loadFilter(filter);
         attributePickerView.loadFilter(filter);
+    }
+
+    @OnClick(R.id.clear_search)
+    public void clearSearch() {
+        searchTerm.setText("");
+    }
+
+    @OnTextChanged(value = R.id.search_term, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    public void onSearchInput(Editable input) {
+        clearSearch.setVisibility(input.length() == 0 ? View.GONE : View.VISIBLE);
     }
 
     @OnClick(R.id.apply_filter)

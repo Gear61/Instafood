@@ -20,6 +20,7 @@ import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.randomappsinc.instafood.R;
+import com.randomappsinc.instafood.api.RestaurantFetcher;
 import com.randomappsinc.instafood.utils.PermissionUtils;
 import com.randomappsinc.instafood.utils.UIUtils;
 
@@ -32,8 +33,6 @@ public class LocationManager implements LocationForm.Listener {
     private static final long DESIRED_LOCATION_TURNAROUND = 1000L;
 
     public interface Listener {
-        void onLocationFetched(String location);
-
         void onServicesOrPermissionChoice();
     }
 
@@ -59,6 +58,8 @@ public class LocationManager implements LocationForm.Listener {
     private MaterialDialog locationDenialDialog;
     private MaterialDialog locationPermissionDialog;
     private LocationForm locationForm;
+
+    private RestaurantFetcher restaurantFetcher;
 
     public LocationManager(@NonNull Listener listener, @NonNull Activity activity) {
         this.listener = listener;
@@ -118,12 +119,15 @@ public class LocationManager implements LocationForm.Listener {
                 .setInterval(DESIRED_LOCATION_TURNAROUND)
                 .setFastestInterval(DESIRED_LOCATION_TURNAROUND)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        restaurantFetcher = RestaurantFetcher.getInstance();
     }
 
     @Override
     public void onLocationEntered(String location) {
         stopFetchingCurrentLocation();
-        listener.onLocationFetched(location);
+        restaurantFetcher.setLocation(location);
+        restaurantFetcher.fetchRestaurant();
     }
 
     public void fetchCurrentLocation() {
@@ -180,10 +184,11 @@ public class LocationManager implements LocationForm.Listener {
                 stopFetchingCurrentLocation();
                 locationFetched = true;
                 Location location = locationResult.getLastLocation();
-                listener.onLocationFetched(
-                        String.valueOf(location.getLatitude())
-                                + ", "
-                                + String.valueOf(location.getLongitude()));
+                String latLongString = String.valueOf(location.getLatitude())
+                        + ", "
+                        + String.valueOf(location.getLongitude());
+                restaurantFetcher.setLocation(latLongString);
+                restaurantFetcher.fetchRestaurant();
             }
         }
     };

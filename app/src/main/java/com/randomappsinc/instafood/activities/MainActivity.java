@@ -6,7 +6,6 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -50,7 +49,6 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     private static final int FILTER_REQUEST_CODE = 1;
 
     private static final String RESTAURANT_KEY = "restaurant";
-    private static final String CURRENT_LOCATION_KEY = "currentLocation";
 
     @BindView(R.id.homepage_scrollview) ScrollView parent;
     @BindView(R.id.restaurant_map) MapView restaurantMap;
@@ -66,7 +64,6 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     private RestaurantPhotosAdapter photosAdapter;
     private RestaurantReviewsAdapter reviewsAdapter;
     private GoogleMap googleMap;
-    @Nullable private String currentLocation;
     private LocationManager locationManager;
     private boolean denialLock;
     private ShakeDetector shakeDetector;
@@ -92,8 +89,11 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
                 restaurantInfo,
                 new IconDrawable(this, IoniconsIcons.ion_location).colorRes(R.color.dark_gray));
 
+        restaurantFetcher = RestaurantFetcher.getInstance();
+        restaurantFetcher.setListener(restaurantInfoListener);
+
         if (savedInstanceState != null) {
-            currentLocation = savedInstanceState.getString(CURRENT_LOCATION_KEY);
+            restaurantFetcher.extractState(savedInstanceState);
             restaurant = savedInstanceState.getParcelable(RESTAURANT_KEY);
 
             if (restaurant == null) {
@@ -108,9 +108,6 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
                 restaurantInfoListener.onReviewsFetched(restaurant.getReviews());
             }
         }
-
-        restaurantFetcher = RestaurantFetcher.getInstance();
-        restaurantFetcher.setListener(restaurantInfoListener);
     }
 
     @Override
@@ -120,7 +117,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
 
         if (restaurant != null) {
             outState.putParcelable(RESTAURANT_KEY, restaurant);
-            outState.putString(CURRENT_LOCATION_KEY, currentLocation);
+            restaurantFetcher.persistState(outState);
         }
     }
 
@@ -133,7 +130,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         restaurantInfoView.renderDistanceText();
 
         // Run this here instead of onCreate() to cover the case where they return from turning on location
-        if (currentLocation == null && !denialLock) {
+        if (restaurantFetcher.getLocation() == null && !denialLock) {
             locationManager.fetchCurrentLocation();
         }
 
@@ -254,11 +251,11 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     }
 
     private void resetAndFindNewRestaurant() {
-        if (currentLocation == null) {
+        if (restaurantFetcher.getLocation() == null) {
             locationManager.fetchCurrentLocation();
         } else {
             restaurant = null;
-            turnOnSkeletonLoading(restaurantFetcher.canReturnRestaurantImmediately());
+            turnOnSkeletonLoading(!restaurantFetcher.canReturnRestaurantImmediately());
             restaurantFetcher.fetchRestaurant();
         }
     }
@@ -321,17 +318,6 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
                 }
                 break;
         }
-    }
-
-    @Override
-    public void onLocationFetched(String location) {
-        if (currentLocation != null && currentLocation.equals(location)) {
-            return;
-        }
-
-        currentLocation = location;
-        restaurantFetcher.setLocation(location);
-        restaurantFetcher.fetchRestaurant();
     }
 
     @Override
