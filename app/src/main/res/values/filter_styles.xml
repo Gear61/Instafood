@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="filter_input">
+        <item name="backgroundTint">@color/app_red</item>
+    </style>
+
+    <style name="filter_input_icon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">24dp</item>
+        <item name="android:textColor">@color/app_red</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="filter_card">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

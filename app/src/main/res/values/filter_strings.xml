@@ -2,24 +2,28 @@
 <resources>
     <string name="filter">Filter</string>
     <string name="reset_all">Reset all</string>
+
+    <string name="search_hint">I\'m looking for&#8230;</string>
+    <string name="search_icon">{ion-android-search}</string>
+    <string name="clear_icon">{ion-android-close}</string>
+
+    <string name="distance_icon">{ion-android-walk}</string>
     <string name="distance">Distance</string>
     <string name="radius_text_miles">Show me places within %.1f miles of me.</string>
     <string name="radius_text_kilometers">Show me places within %.1f kilometers of me.</string>
-    <string name="sort_by">Sort by</string>
-    <string name="apply_filter">Apply Filter</string>
-    <string name="filter_applied">Filter applied.</string>
 
+    <string name="money_icon">{ion-cash}</string>
     <string name="price">Price</string>
     <string name="cheap">Cheap</string>
     <string name="moderate">Moderate</string>
     <string name="pricey">Pricey</string>
     <string name="very_expensive">Very expensive</string>
 
+    <string name="options_icon">{ion-android-options}</string>
     <string name="other_options">Other options</string>
     <string name="hot_and_new">Hot and new</string>
     <string name="gender_neutral_restrooms">Gender neutral restrooms</string>
 
-    <string name="distance_icon">{ion-android-walk}</string>
-    <string name="money_icon">{ion-cash}</string>
-    <string name="options_icon">{ion-android-options}</string>
+    <string name="apply_filter">Apply Filter</string>
+    <string name="filter_applied">Filter applied.</string>
 </resources>

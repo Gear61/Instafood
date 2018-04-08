@@ -2,7 +2,6 @@ package com.randomappsinc.instafood.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +27,6 @@ import butterknife.OnClick;
 
 public class FilterActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.filter_content) View filterContent;
     @BindView(R.id.radius_slider) SeekBar radiusSlider;
     @BindView(R.id.radius_text) TextView distanceText;
@@ -50,9 +48,9 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.filter);
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setNavigationIcon(new IconDrawable(this, IoniconsIcons.ion_android_close)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, IoniconsIcons.ion_android_close)
                 .colorRes(R.color.white)
                 .actionBarSize());
 

@@ -1,24 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:ignore="SpUsage, RtlHardcoded">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <FrameLayout
+        android:id="@+id/search_term_container"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="12dp">
+
+        <EditText
+            android:id="@+id/search_term"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/search_hint"
+            android:layout_marginLeft="26dp"
+            android:paddingRight="32dp"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:textSize="18dp"
+            android:textColor="@color/dark_gray"
+            android:textColorHint="@color/gray"
+            style="@style/filter_input"/>
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:text="@string/search_icon"
+            style="@style/filter_input_icon"/>
+
+        <com.joanzapata.iconify.widget.IconTextView
+            android:id="@+id/clear_search"
+            android:text="@string/clear_icon"
+            android:visibility="gone"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="6dp"
+            style="@style/filter_input_icon"/>
+    </FrameLayout>
+
+    <View
+        android:id="@+id/search_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_200"
+        android:layout_below="@+id/search_term_container"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/search_divider"
         android:layout_above="@id/button_container"
         android:background="@color/gray_200"
         android:padding="4dp"
