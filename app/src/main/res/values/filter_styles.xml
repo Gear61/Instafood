@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="filter_card">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="contentPadding">4dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardCornerRadius">3dp</item>
+        <item name="cardElevation">1dp</item>
+    </style>
+
     <style name="filter_checkbox_container">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -26,17 +37,31 @@
     <style name="filter_divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:background">@color/gray_300</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:background">@color/gray</item>
     </style>
 
     <style name="filter_header">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:textSize">21dp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="filter_icon">
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_width">16dp</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="filter_header_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">4dp</item>
     </style>
 </resources>

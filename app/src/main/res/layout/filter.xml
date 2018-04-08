@@ -19,7 +19,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:layout_above="@id/button_container">
+        android:layout_above="@id/button_container"
+        android:background="@color/gray_200"
+        android:padding="4dp"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:id="@+id/filter_content"
@@ -27,28 +30,44 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/search_radius"
-                style="@style/filter_header"/>
+            <android.support.v7.widget.CardView style="@style/filter_card">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/radius_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:textSize="17dp"
-                android:textColor="@color/dark_gray"/>
+                    <LinearLayout style="@style/filter_header_container">
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/filter_icon"
+                            android:text="@string/distance_icon"/>
 
-            <SeekBar
-                android:id="@+id/radius_slider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"/>
+                        <TextView
+                            style="@style/filter_header"
+                            android:text="@string/distance"/>
+                    </LinearLayout>
+
+                    <View style="@style/filter_divider"/>
+
+                    <TextView
+                        android:id="@+id/radius_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textSize="17dp"
+                        android:textColor="@color/dark_gray"/>
+
+                    <SeekBar
+                        android:id="@+id/radius_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
             <View
                 android:layout_marginTop="20dp"
