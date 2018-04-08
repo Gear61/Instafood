@@ -2,11 +2,16 @@ package com.randomappsinc.instafood.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.api.RestaurantFetcher;
 import com.randomappsinc.instafood.constants.DistanceUnit;
@@ -23,6 +28,7 @@ import butterknife.OnClick;
 
 public class FilterActivity extends AppCompatActivity {
 
+    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.filter_content) View filterContent;
     @BindView(R.id.radius_slider) SeekBar radiusSlider;
     @BindView(R.id.radius_text) TextView distanceText;
@@ -43,6 +49,12 @@ public class FilterActivity extends AppCompatActivity {
 
         setContentView(R.layout.filter);
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationIcon(new IconDrawable(this, IoniconsIcons.ion_android_close)
+                .colorRes(R.color.white)
+                .actionBarSize());
 
         radiusSlider.setMax(PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
                 ? maxMilesSliderValue
@@ -92,17 +104,6 @@ public class FilterActivity extends AppCompatActivity {
         attributePickerView.loadFilter(filter);
     }
 
-    @OnClick(R.id.close)
-    public void closeFilter() {
-        finish();
-    }
-
-    @OnClick(R.id.reset_all)
-    public void resetFilter() {
-        filter.reset();
-        loadFilterIntoView();
-    }
-
     @OnClick(R.id.apply_filter)
     public void applyFilter() {
         RestaurantFetcher.getInstance().clearRestaurants();
@@ -127,5 +128,25 @@ public class FilterActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(0, R.anim.slide_out_bottom);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.filter_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.reset_all:
+                filter.reset();
+                loadFilterIntoView();
+                return true;
+        }
+        return false;
     }
 }
