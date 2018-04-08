@@ -30,7 +30,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.CardView style="@style/filter_card">
+            <android.support.v7.widget.CardView
+                android:layout_marginTop="0dp"
+                style="@style/filter_card">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -69,104 +72,123 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <View
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                style="@style/filter_divider"/>
+            <android.support.v7.widget.CardView style="@style/filter_card">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <TextView
-                android:layout_marginBottom="10dp"
-                android:text="@string/price_range"
-                style="@style/filter_header"/>
+                    <LinearLayout style="@style/filter_header_container">
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/filter_icon"
+                            android:text="@string/money_icon"/>
 
-            <FrameLayout
-                android:id="@+id/cheap_container"
-                style="@style/filter_checkbox_container">
+                        <TextView
+                            style="@style/filter_header"
+                            android:text="@string/price"/>
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/cheap_text"
-                    style="@style/filter_checkbox_text"/>
+                    <View style="@style/filter_divider"/>
 
-                <CheckBox
-                    android:id="@+id/cheap_checkbox"
-                    style="@style/filter_checkbox"/>
-            </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/cheap_container"
+                        style="@style/filter_checkbox_container">
 
-            <FrameLayout
-                android:id="@+id/moderate_container"
-                style="@style/filter_checkbox_container">
+                        <TextView
+                            android:id="@+id/cheap_text"
+                            style="@style/filter_checkbox_text"/>
 
-                <TextView
-                    android:id="@+id/moderate_text"
-                    style="@style/filter_checkbox_text"/>
+                        <CheckBox
+                            android:id="@+id/cheap_checkbox"
+                            style="@style/filter_checkbox"/>
+                    </FrameLayout>
 
-                <CheckBox
-                    android:id="@+id/moderate_checkbox"
-                    style="@style/filter_checkbox"/>
-            </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/moderate_container"
+                        style="@style/filter_checkbox_container">
 
-            <FrameLayout
-                android:id="@+id/pricey_container"
-                style="@style/filter_checkbox_container">
+                        <TextView
+                            android:id="@+id/moderate_text"
+                            style="@style/filter_checkbox_text"/>
 
-                <TextView
-                    android:id="@+id/pricey_text"
-                    style="@style/filter_checkbox_text"/>
+                        <CheckBox
+                            android:id="@+id/moderate_checkbox"
+                            style="@style/filter_checkbox"/>
+                    </FrameLayout>
 
-                <CheckBox
-                    android:id="@+id/pricey_checkbox"
-                    style="@style/filter_checkbox"/>
-            </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/pricey_container"
+                        style="@style/filter_checkbox_container">
 
-            <FrameLayout
-                android:id="@+id/very_expensive_container"
-                style="@style/filter_checkbox_container">
+                        <TextView
+                            android:id="@+id/pricey_text"
+                            style="@style/filter_checkbox_text"/>
 
-                <TextView
-                    android:id="@+id/very_expensive_text"
-                    style="@style/filter_checkbox_text"/>
+                        <CheckBox
+                            android:id="@+id/pricey_checkbox"
+                            style="@style/filter_checkbox"/>
+                    </FrameLayout>
 
-                <CheckBox
-                    android:id="@+id/very_expensive_checkbox"
-                    style="@style/filter_checkbox"/>
-            </FrameLayout>
+                    <FrameLayout
+                        android:id="@+id/very_expensive_container"
+                        style="@style/filter_checkbox_container">
 
-            <View
-                android:layout_marginTop="14dp"
-                android:layout_marginBottom="20dp"
-                style="@style/filter_divider"/>
+                        <TextView
+                            android:id="@+id/very_expensive_text"
+                            style="@style/filter_checkbox_text"/>
 
-            <TextView
-                android:layout_marginBottom="10dp"
-                android:text="@string/other_options"
-                style="@style/filter_header"/>
+                        <CheckBox
+                            android:id="@+id/very_expensive_checkbox"
+                            style="@style/filter_checkbox"/>
+                    </FrameLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-            <FrameLayout
-                android:id="@+id/hot_new_container"
-                style="@style/filter_checkbox_container">
+            <android.support.v7.widget.CardView style="@style/filter_card">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:text="@string/hot_and_new"
-                    style="@style/filter_checkbox_text"/>
+                    <LinearLayout style="@style/filter_header_container">
+                        <com.joanzapata.iconify.widget.IconTextView
+                            style="@style/filter_icon"
+                            android:text="@string/options_icon"/>
 
-                <CheckBox
-                    android:id="@+id/hot_new_checkbox"
-                    style="@style/filter_checkbox"/>
-            </FrameLayout>
+                        <TextView
+                            style="@style/filter_header"
+                            android:text="@string/other_options"/>
+                    </LinearLayout>
 
-            <FrameLayout
-                android:id="@+id/gender_neutral_container"
-                android:paddingBottom="16dp"
-                style="@style/filter_checkbox_container">
+                    <View style="@style/filter_divider"/>
 
-                <TextView
-                    android:text="@string/gender_neutral_restrooms"
-                    style="@style/filter_checkbox_text"/>
+                    <FrameLayout
+                        android:id="@+id/hot_new_container"
+                        style="@style/filter_checkbox_container">
 
-                <CheckBox
-                    android:id="@+id/gender_neutral_checkbox"
-                    style="@style/filter_checkbox"/>
-            </FrameLayout>
+                        <TextView
+                            android:text="@string/hot_and_new"
+                            style="@style/filter_checkbox_text"/>
+
+                        <CheckBox
+                            android:id="@+id/hot_new_checkbox"
+                            style="@style/filter_checkbox"/>
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/gender_neutral_container"
+                        style="@style/filter_checkbox_container">
+
+                        <TextView
+                            android:text="@string/gender_neutral_restrooms"
+                            style="@style/filter_checkbox_text"/>
+
+                        <CheckBox
+                            android:id="@+id/gender_neutral_checkbox"
+                            style="@style/filter_checkbox"/>
+                    </FrameLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>
 

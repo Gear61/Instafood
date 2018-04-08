@@ -14,10 +14,7 @@
     <style name="filter_checkbox_container">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">6dp</item>
+        <item name="android:padding">4dp</item>
     </style>
 
     <style name="filter_checkbox_text">

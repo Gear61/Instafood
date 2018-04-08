@@ -9,7 +9,7 @@
     <string name="apply_filter">Apply Filter</string>
     <string name="filter_applied">Filter applied.</string>
 
-    <string name="price_range">Price range</string>
+    <string name="price">Price</string>
     <string name="cheap">Cheap</string>
     <string name="moderate">Moderate</string>
     <string name="pricey">Pricey</string>
@@ -20,4 +20,6 @@
     <string name="gender_neutral_restrooms">Gender neutral restrooms</string>
 
     <string name="distance_icon">{ion-android-walk}</string>
+    <string name="money_icon">{ion-cash}</string>
+    <string name="options_icon">{ion-android-options}</string>
 </resources>
