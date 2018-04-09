@@ -42,6 +42,7 @@ public class FilterActivity extends AppCompatActivity {
     @BindString(R.string.radius_text_miles) String radiusTemplateMiles;
     @BindString(R.string.radius_text_kilometers) String radiusTemplateKilometers;
 
+    private RestaurantFetcher restaurantFetcher;
     private Filter filter;
     private PriceRangePickerView priceRangePickerView;
     private AttributePickerView attributePickerView;
@@ -59,6 +60,7 @@ public class FilterActivity extends AppCompatActivity {
                 .colorRes(R.color.white)
                 .actionBarSize());
 
+        restaurantFetcher = RestaurantFetcher.getInstance();
         radiusSlider.setMax(PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
                 ? maxMilesSliderValue
                 : maxKilometersSliderValue);
@@ -94,6 +96,8 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     private void loadFilterIntoView() {
+        searchTerm.setText(restaurantFetcher.getSearchTerm());
+
         float filterDistanceValue = PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
                 ? filter.getRadiusInMiles()
                 : filter.getRadiusInKilometers();
@@ -119,7 +123,9 @@ public class FilterActivity extends AppCompatActivity {
 
     @OnClick(R.id.apply_filter)
     public void applyFilter() {
-        RestaurantFetcher.getInstance().clearRestaurants();
+        restaurantFetcher.clearRestaurants();
+        String searchText = searchTerm.getText().toString().trim();
+        restaurantFetcher.setSearchTerm(searchText);
 
         double sliderVal = radiusSlider.getProgress();
         double distanceValue = (sliderVal + 1) / 10;

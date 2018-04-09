@@ -2,6 +2,7 @@ package com.randomappsinc.instafood.api;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.text.TextUtils;
 
 import com.randomappsinc.instafood.api.callbacks.FetchPhotosCallback;
 import com.randomappsinc.instafood.api.callbacks.FetchReviewsCallback;
@@ -59,16 +60,19 @@ public class RestClient {
         return retrofit;
     }
 
-    void findRestaurants(final String location) {
+    void findRestaurants(final String location, final String searchTerm) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 if (currentFindRestaurantsCall != null) {
                     currentFindRestaurantsCall.cancel();
                 }
+                String finalSearchTerm = TextUtils.isEmpty(searchTerm)
+                        ? ApiConstants.DEFAULT_SEARCH_TERM
+                        : searchTerm;
                 Filter filter = PreferencesManager.get().getFilter();
                 currentFindRestaurantsCall = yelpService.findRestaurants(
-                        ApiConstants.DEFAULT_SEARCH_TERM,
+                        finalSearchTerm,
                         location,
                         ApiConstants.DEFAULT_NUM_RESTAURANT_RESULTS,
                         true,

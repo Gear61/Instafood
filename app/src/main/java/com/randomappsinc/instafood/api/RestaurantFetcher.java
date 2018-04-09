@@ -15,6 +15,7 @@ import java.util.Random;
 public class RestaurantFetcher {
 
     private static final String CURRENT_LOCATION_KEY = "currentLocation";
+    private static final String SEARCH_TERM_KEY = "searchTerm";
 
     public interface Listener {
         void onRestaurantFetched(Restaurant newRestaurant);
@@ -36,6 +37,7 @@ public class RestaurantFetcher {
     private Listener listener;
     private RestClient restClient;
     private String location;
+    private String searchTerm = "";
     private Random random;
     private List<Restaurant> restaurantPool;
     private List<Restaurant> alreadyChosen;
@@ -59,6 +61,14 @@ public class RestaurantFetcher {
         this.location = location;
     }
 
+    public String getSearchTerm() {
+        return searchTerm;
+    }
+
+    public void setSearchTerm(String searchTerm) {
+        this.searchTerm = searchTerm;
+    }
+
     public boolean canReturnRestaurantImmediately() {
         return !restaurantPool.isEmpty();
     }
@@ -68,7 +78,7 @@ public class RestaurantFetcher {
         restClient.cancelReviewsFetch();
 
         if (restaurantPool.isEmpty()) {
-            restClient.findRestaurants(location);
+            restClient.findRestaurants(location, searchTerm);
         } else {
             returnRestaurant();
         }
@@ -113,10 +123,12 @@ public class RestaurantFetcher {
 
     public void persistState(Bundle outState) {
         outState.putString(CURRENT_LOCATION_KEY, location);
+        outState.putString(SEARCH_TERM_KEY, searchTerm);
     }
 
     public void extractState(Bundle savedInstanceState) {
         location = savedInstanceState.getString(CURRENT_LOCATION_KEY);
+        searchTerm = savedInstanceState.getString(SEARCH_TERM_KEY);
     }
 
     public void clearEverything() {
