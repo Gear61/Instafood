@@ -112,12 +112,12 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         restaurantMap.onSaveInstanceState(outState);
         if (restaurant != null) {
             outState.putParcelable(RESTAURANT_KEY, restaurant);
         }
         restaurantFetcher.persistState(outState);
-        super.onSaveInstanceState(outState);
     }
 
     @Override

@@ -142,6 +142,8 @@ public class RestaurantFetcher {
         restClient.cancelPhotosFetch();
         restClient.cancelReviewsFetch();
         listener = null;
+        location = null;
+        searchTerm = "";
         restaurantPool.clear();
         alreadyChosen.clear();
     }
