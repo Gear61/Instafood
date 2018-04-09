@@ -16,6 +16,8 @@ public class RestaurantFetcher {
 
     private static final String CURRENT_LOCATION_KEY = "currentLocation";
     private static final String SEARCH_TERM_KEY = "searchTerm";
+    private static final String RESTAURANT_POOL_KEY = "restaurantPool";
+    private static final String ALREADY_CHOSEN_KEY = "alreadyChosen";
 
     public interface Listener {
         void onRestaurantFetched(Restaurant newRestaurant);
@@ -39,8 +41,8 @@ public class RestaurantFetcher {
     private String location;
     private String searchTerm = "";
     private Random random;
-    private List<Restaurant> restaurantPool;
-    private List<Restaurant> alreadyChosen;
+    private ArrayList<Restaurant> restaurantPool;
+    private ArrayList<Restaurant> alreadyChosen;
 
     private RestaurantFetcher() {
         restClient = RestClient.getInstance();
@@ -124,11 +126,15 @@ public class RestaurantFetcher {
     public void persistState(Bundle outState) {
         outState.putString(CURRENT_LOCATION_KEY, location);
         outState.putString(SEARCH_TERM_KEY, searchTerm);
+        outState.putParcelableArrayList(RESTAURANT_POOL_KEY, restaurantPool);
+        outState.putParcelableArrayList(ALREADY_CHOSEN_KEY, alreadyChosen);
     }
 
     public void extractState(Bundle savedInstanceState) {
         location = savedInstanceState.getString(CURRENT_LOCATION_KEY);
         searchTerm = savedInstanceState.getString(SEARCH_TERM_KEY);
+        restaurantPool = savedInstanceState.getParcelableArrayList(RESTAURANT_POOL_KEY);
+        alreadyChosen = savedInstanceState.getParcelableArrayList(ALREADY_CHOSEN_KEY);
     }
 
     public void clearEverything() {

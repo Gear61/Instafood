@@ -93,8 +93,8 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         restaurantFetcher.setListener(restaurantInfoListener);
 
         if (savedInstanceState != null) {
-            restaurantFetcher.extractState(savedInstanceState);
             restaurant = savedInstanceState.getParcelable(RESTAURANT_KEY);
+            restaurantFetcher.extractState(savedInstanceState);
 
             if (restaurant == null) {
                 return;
@@ -112,13 +112,12 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         restaurantMap.onSaveInstanceState(outState);
-
         if (restaurant != null) {
             outState.putParcelable(RESTAURANT_KEY, restaurant);
-            restaurantFetcher.persistState(outState);
         }
+        restaurantFetcher.persistState(outState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
