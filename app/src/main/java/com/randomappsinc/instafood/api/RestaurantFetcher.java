@@ -2,11 +2,15 @@ package com.randomappsinc.instafood.api;
 
 
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 
+import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
+import com.randomappsinc.instafood.utils.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -25,6 +29,8 @@ public class RestaurantFetcher {
         void onPhotosFetched(ArrayList<String> newPhotos);
 
         void onReviewsFetched(ArrayList<RestaurantReview> newReviews);
+
+        void onClosingTimeFetched(String closingTimeText, @ColorRes int color);
     }
 
     private static RestaurantFetcher instance;
@@ -117,6 +123,11 @@ public class RestaurantFetcher {
 
     public void onPhotosFetched(ArrayList<String> photos) {
         listener.onPhotosFetched(photos);
+    }
+
+    public void onClosingTimeFetched(Calendar closingTime) {
+        String closingTimeText = TimeUtils.getHoursInfoText(closingTime);
+        listener.onClosingTimeFetched(closingTimeText, R.color.green);
     }
 
     public void onReviewsFetched(ArrayList<RestaurantReview> reviews) {

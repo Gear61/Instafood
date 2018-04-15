@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -165,6 +166,11 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
             reviewsStub.setVisibility(View.GONE);
             reviewsContainer.setVisibility(View.VISIBLE);
             reviewsAdapter.setReviews(freshReviews, reviewsContainer, MainActivity.this);
+        }
+
+        @Override
+        public void onClosingTimeFetched(String closingTimeText, int color) {
+            Toast.makeText(MainActivity.this, closingTimeText, Toast.LENGTH_LONG).show();
         }
     };
 

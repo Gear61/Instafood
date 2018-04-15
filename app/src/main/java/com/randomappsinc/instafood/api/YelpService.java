@@ -1,6 +1,6 @@
 package com.randomappsinc.instafood.api;
 
-import com.randomappsinc.instafood.api.models.RestaurantPhotos;
+import com.randomappsinc.instafood.api.models.RestaurantInfo;
 import com.randomappsinc.instafood.api.models.RestaurantReviewResults;
 import com.randomappsinc.instafood.api.models.RestaurantSearchResults;
 
@@ -21,7 +21,7 @@ public interface YelpService {
                                                   @Query("attributes") String attributes);
 
     @GET("v3/businesses/{id}")
-    Call<RestaurantPhotos> fetchRestaurantPhotos(@Path("id") String restaurantId);
+    Call<RestaurantInfo> fetchRestaurantPhotos(@Path("id") String restaurantId);
 
     @GET("v3/businesses/{id}/reviews")
     Call<RestaurantReviewResults> fetchRestaurantReviews(@Path("id") String restaurantId);

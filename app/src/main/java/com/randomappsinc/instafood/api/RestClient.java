@@ -4,10 +4,10 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
 
-import com.randomappsinc.instafood.api.callbacks.FetchPhotosCallback;
+import com.randomappsinc.instafood.api.callbacks.FetchRestaurantInfoCallback;
 import com.randomappsinc.instafood.api.callbacks.FetchReviewsCallback;
 import com.randomappsinc.instafood.api.callbacks.FindRestaurantsCallback;
-import com.randomappsinc.instafood.api.models.RestaurantPhotos;
+import com.randomappsinc.instafood.api.models.RestaurantInfo;
 import com.randomappsinc.instafood.api.models.RestaurantReviewResults;
 import com.randomappsinc.instafood.api.models.RestaurantSearchResults;
 import com.randomappsinc.instafood.models.Filter;
@@ -28,7 +28,7 @@ public class RestClient {
     private Handler handler;
 
     private Call<RestaurantSearchResults> currentFindRestaurantsCall;
-    private Call<RestaurantPhotos> currentFetchPhotosCall;
+    private Call<RestaurantInfo> currentFetchPhotosCall;
     private Call<RestaurantReviewResults> currentFetchReviewsCall;
 
     public static RestClient getInstance() {
@@ -100,7 +100,7 @@ public class RestClient {
             @Override
             public void run() {
                 currentFetchPhotosCall = yelpService.fetchRestaurantPhotos(restaurant.getId());
-                currentFetchPhotosCall.enqueue(new FetchPhotosCallback());
+                currentFetchPhotosCall.enqueue(new FetchRestaurantInfoCallback());
             }
         });
     }
