@@ -1,7 +1,5 @@
 package com.randomappsinc.instafood.utils;
 
-import com.randomappsinc.instafood.R;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +23,6 @@ public class TimeUtils {
         Date date = new Date(closingTime.getTimeInMillis());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(OPEN_UNTIL_FORMAT, Locale.getDefault());
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
-        String hoursText = simpleDateFormat.format(date);
-        return String.format(StringUtils.getString(R.string.open_until), hoursText);
+        return simpleDateFormat.format(date);
     }
 }

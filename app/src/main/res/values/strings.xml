@@ -41,6 +41,6 @@
     </string>
 
     <string name="open_until">Open until %s</string>
-    <string name="closing_at">Closing at %s</string>
+    <string name="closing_at">Closes at %s</string>
     <string name="closing_time_unavailable">Closing time unavailable</string>
 </resources>
