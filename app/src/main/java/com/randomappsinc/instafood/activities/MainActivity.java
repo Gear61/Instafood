@@ -6,6 +6,7 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,10 +34,12 @@ import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
 import com.randomappsinc.instafood.utils.UIUtils;
+import com.randomappsinc.instafood.views.ClosingHourView;
 import com.randomappsinc.instafood.views.RestaurantInfoView;
 import com.squareup.seismic.ShakeDetector;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +55,6 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
 
     @BindView(R.id.homepage_scrollview) ScrollView parent;
     @BindView(R.id.hours_card) View hoursCard;
-    @BindView(R.id.hours_text) TextView hoursText;
     @BindView(R.id.restaurant_map) MapView restaurantMap;
     @BindView(R.id.restaurant_info_parent) View restaurantInfo;
     @BindView(R.id.photos_stub) View photosStub;
@@ -63,10 +64,11 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
 
     private RestaurantFetcher restaurantFetcher;
     private Restaurant restaurant;
+    private ClosingHourView closingHourView;
+    private GoogleMap googleMap;
     private RestaurantInfoView restaurantInfoView;
     private RestaurantPhotosAdapter photosAdapter;
     private RestaurantReviewsAdapter reviewsAdapter;
-    private GoogleMap googleMap;
     private LocationManager locationManager;
     private boolean denialLock;
     private ShakeDetector shakeDetector;
@@ -80,6 +82,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         locationManager = new LocationManager(this, this);
         shakeDetector = new ShakeDetector(this);
 
+        closingHourView = new ClosingHourView(hoursCard);
         restaurantMap.onCreate(savedInstanceState);
         restaurantMap.getMapAsync(this);
 
@@ -171,10 +174,8 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         }
 
         @Override
-        public void onClosingTimeFetched(String closingTimeText, int color) {
-            hoursText.setText(closingTimeText);
-            hoursText.setTextColor(color);
-            hoursCard.setVisibility(View.VISIBLE);
+        public void onClosingTimeFetched(@Nullable Calendar closingTime) {
+            closingHourView.setClosingHour(closingTime);
         }
     };
 
@@ -264,7 +265,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
             locationManager.fetchCurrentLocation();
         } else {
             restaurant = null;
-            hoursCard.setVisibility(View.GONE);
+            closingHourView.turnOnSkeletonLoading();
             turnOnSkeletonLoading(!restaurantFetcher.canReturnRestaurantImmediately());
             restaurantFetcher.fetchRestaurant();
         }

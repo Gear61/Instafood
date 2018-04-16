@@ -2,12 +2,10 @@ package com.randomappsinc.instafood.api;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
-import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
-import com.randomappsinc.instafood.utils.TimeUtils;
-import com.randomappsinc.instafood.utils.UIUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,7 +28,7 @@ public class RestaurantFetcher {
 
         void onReviewsFetched(ArrayList<RestaurantReview> newReviews);
 
-        void onClosingTimeFetched(String closingTimeText, int color);
+        void onClosingTimeFetched(@Nullable Calendar closingTime);
     }
 
     private static RestaurantFetcher instance;
@@ -126,8 +124,7 @@ public class RestaurantFetcher {
     }
 
     public void onClosingTimeFetched(Calendar closingTime) {
-        String closingTimeText = TimeUtils.getHoursInfoText(closingTime);
-        listener.onClosingTimeFetched(closingTimeText, UIUtils.getColor(R.color.green));
+        listener.onClosingTimeFetched(closingTime);
     }
 
     public void onReviewsFetched(ArrayList<RestaurantReview> reviews) {

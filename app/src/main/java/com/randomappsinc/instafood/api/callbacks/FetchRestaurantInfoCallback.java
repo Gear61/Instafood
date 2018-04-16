@@ -11,7 +11,6 @@ import com.randomappsinc.instafood.api.models.RestaurantInfo;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -25,10 +24,7 @@ public class FetchRestaurantInfoCallback implements Callback<RestaurantInfo> {
     public void onResponse(@NonNull Call<RestaurantInfo> call, @NonNull Response<RestaurantInfo> response) {
         if (response.code() == ApiConstants.HTTP_STATUS_OK) {
             RestaurantFetcher.getInstance().onPhotosFetched(response.body().getPhotoUrls());
-            Calendar closingTime = response.body().getClosingTime();
-            if (closingTime != null) {
-                RestaurantFetcher.getInstance().onClosingTimeFetched(closingTime);
-            }
+            RestaurantFetcher.getInstance().onClosingTimeFetched(response.body().getClosingTime());
         } else if (response.code() == ApiConstants.HTTP_STATUS_FORBIDDEN) {
             Converter<ResponseBody, BusinessInfoFetchError> errorConverter =
                     RestClient.getInstance().getRetrofitInstance()
