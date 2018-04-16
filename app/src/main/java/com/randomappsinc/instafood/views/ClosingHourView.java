@@ -40,7 +40,6 @@ public class ClosingHourView {
             long closingMillis = closingHour.getTimeInMillis();
             long currentMillis = System.currentTimeMillis();
             String formattedClosingHour = TimeUtils.getHoursInfoText(closingHour);
-            long diff = closingMillis - currentMillis;
             if (closingMillis - currentMillis <= MILLIS_IN_30_MINUTES) {
                 hoursText.setTextColor(UIUtils.getColor(R.color.red));
                 hoursText.setText(String.format(StringUtils.getString(R.string.closing_at), formattedClosingHour));

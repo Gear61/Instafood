@@ -37,6 +37,18 @@ public class RestaurantInfo {
         @Nullable
         Calendar getTodaysClosingTime() {
             int yelpCurrentDay = getYelpDayFromCurrentDay();
+
+            int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            // If the user is searching for something late at night (really early in the morning),
+            // we need to get the hours for the previous day
+            if (currentHour >= 0 && currentHour <= 4) {
+                yelpCurrentDay--;
+                // If it's currently Monday, we need to look for Sunday hours
+                if (yelpCurrentDay < 0) {
+                    yelpCurrentDay = 6;
+                }
+            }
+
             for (DailyHours dailyHours : dailyHoursList) {
                 if (dailyHours.day == yelpCurrentDay) {
                     Calendar closingCalendar = Calendar.getInstance();
@@ -47,6 +59,8 @@ public class RestaurantInfo {
                     if (closingHour >= 0 && closingHour <= 4) {
                         int currentDayInMonth = closingCalendar.get(Calendar.DAY_OF_MONTH);
                         closingCalendar.set(Calendar.DAY_OF_MONTH, currentDayInMonth + 1);
+                    } else {
+                        closingCalendar.set(Calendar.DAY_OF_WEEK, getCalendarDayFromYelpDay(dailyHours.day));
                     }
 
                     int closingMinutes = dailyHours.end % 100;
