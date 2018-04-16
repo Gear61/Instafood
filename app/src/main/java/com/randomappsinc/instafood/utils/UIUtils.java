@@ -1,6 +1,7 @@
 package com.randomappsinc.instafood.utils;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.support.annotation.StringRes;
 import android.view.Menu;
 import android.widget.CompoundButton;
@@ -61,5 +62,9 @@ public class UIUtils {
     public static void setCheckedImmediately(CompoundButton checkableView, boolean checked) {
         checkableView.setChecked(checked);
         checkableView.jumpDrawablesToCurrentState();
+    }
+
+    public static int getColor(@ColorRes int color) {
+        return MyApplication.getAppContext().getResources().getColor(color);
     }
 }

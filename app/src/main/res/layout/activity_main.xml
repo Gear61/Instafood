@@ -14,10 +14,27 @@
         android:paddingBottom="8dp"
         android:descendantFocusability="blocksDescendants">
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/restaurant_map"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="200dp">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/restaurant_map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/hours_card"
+                style="@style/hours_card">
+
+                <TextView
+                    android:id="@+id/hours_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:maxLines="1"/>
+            </android.support.v7.widget.CardView>
+        </FrameLayout>
 
         <include layout="@layout/restaurant_cell"/>
 

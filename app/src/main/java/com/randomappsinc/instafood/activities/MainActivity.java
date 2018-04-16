@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,6 +52,8 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     private static final String RESTAURANT_KEY = "restaurant";
 
     @BindView(R.id.homepage_scrollview) ScrollView parent;
+    @BindView(R.id.hours_card) View hoursCard;
+    @BindView(R.id.hours_text) TextView hoursText;
     @BindView(R.id.restaurant_map) MapView restaurantMap;
     @BindView(R.id.restaurant_info_parent) View restaurantInfo;
     @BindView(R.id.photos_stub) View photosStub;
@@ -170,7 +172,9 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
 
         @Override
         public void onClosingTimeFetched(String closingTimeText, int color) {
-            Toast.makeText(MainActivity.this, closingTimeText, Toast.LENGTH_LONG).show();
+            hoursText.setText(closingTimeText);
+            hoursText.setTextColor(color);
+            hoursCard.setVisibility(View.VISIBLE);
         }
     };
 
@@ -260,6 +264,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
             locationManager.fetchCurrentLocation();
         } else {
             restaurant = null;
+            hoursCard.setVisibility(View.GONE);
             turnOnSkeletonLoading(!restaurantFetcher.canReturnRestaurantImmediately());
             restaurantFetcher.fetchRestaurant();
         }
