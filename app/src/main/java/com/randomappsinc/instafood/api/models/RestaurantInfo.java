@@ -127,6 +127,6 @@ public class RestaurantInfo {
 
     @Nullable
     public Calendar getClosingTime() {
-        return hoursInfo.isEmpty() ? null : hoursInfo.get(0).getTodaysClosingTime();
+        return (hoursInfo == null || hoursInfo.isEmpty()) ? null : hoursInfo.get(0).getTodaysClosingTime();
     }
 }
