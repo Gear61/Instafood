@@ -4,11 +4,11 @@ package com.randomappsinc.instafood.api;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.randomappsinc.instafood.api.models.DailyHours;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -28,7 +28,7 @@ public class RestaurantFetcher {
 
         void onReviewsFetched(ArrayList<RestaurantReview> newReviews);
 
-        void onClosingTimeFetched(@Nullable Calendar closingTime);
+        void onClosingTimeFetched(@Nullable List<DailyHours> hoursInfo);
     }
 
     private static RestaurantFetcher instance;
@@ -123,7 +123,7 @@ public class RestaurantFetcher {
         listener.onPhotosFetched(photos);
     }
 
-    public void onClosingTimeFetched(Calendar closingTime) {
+    public void onClosingTimeFetched(@Nullable List<DailyHours> closingTime) {
         listener.onClosingTimeFetched(closingTime);
     }
 

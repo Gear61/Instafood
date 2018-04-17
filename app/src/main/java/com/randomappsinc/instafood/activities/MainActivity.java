@@ -29,6 +29,7 @@ import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.adapters.RestaurantPhotosAdapter;
 import com.randomappsinc.instafood.adapters.RestaurantReviewsAdapter;
 import com.randomappsinc.instafood.api.RestaurantFetcher;
+import com.randomappsinc.instafood.api.models.DailyHours;
 import com.randomappsinc.instafood.location.LocationManager;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
@@ -39,7 +40,7 @@ import com.randomappsinc.instafood.views.RestaurantInfoView;
 import com.squareup.seismic.ShakeDetector;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -174,8 +175,8 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         }
 
         @Override
-        public void onClosingTimeFetched(@Nullable Calendar closingTime) {
-            closingHourView.setClosingHour(closingTime);
+        public void onClosingTimeFetched(@Nullable List<DailyHours> hoursInfo) {
+            closingHourView.setHours(hoursInfo);
         }
     };
 

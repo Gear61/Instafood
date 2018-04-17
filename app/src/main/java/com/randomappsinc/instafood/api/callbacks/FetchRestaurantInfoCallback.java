@@ -24,7 +24,7 @@ public class FetchRestaurantInfoCallback implements Callback<RestaurantInfo> {
     public void onResponse(@NonNull Call<RestaurantInfo> call, @NonNull Response<RestaurantInfo> response) {
         if (response.code() == ApiConstants.HTTP_STATUS_OK) {
             RestaurantFetcher.getInstance().onPhotosFetched(response.body().getPhotoUrls());
-            RestaurantFetcher.getInstance().onClosingTimeFetched(response.body().getClosingTime());
+            RestaurantFetcher.getInstance().onClosingTimeFetched(response.body().getHoursInfo());
         } else if (response.code() == ApiConstants.HTTP_STATUS_FORBIDDEN) {
             Converter<ResponseBody, BusinessInfoFetchError> errorConverter =
                     RestClient.getInstance().getRetrofitInstance()
