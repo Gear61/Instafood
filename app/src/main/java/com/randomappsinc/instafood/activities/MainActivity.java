@@ -208,16 +208,20 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     private final GoogleMap.OnMapClickListener mapClickListener = new GoogleMap.OnMapClickListener() {
         @Override
         public void onMapClick(LatLng latLng) {
-            if (restaurant == null) {
-                return;
-            }
-
-            String mapUri = "google.navigation:q=" + restaurant.getAddress() + " " + restaurant.getName();
-            startActivity(Intent.createChooser(
-                    new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(mapUri)),
-                    getString(R.string.navigate_with)));
+            navigateToRestaurant();
         }
     };
+
+    private void navigateToRestaurant() {
+        if (restaurant == null) {
+            return;
+        }
+
+        String mapUri = "google.navigation:q=" + restaurant.getAddress() + " " + restaurant.getName();
+        startActivity(Intent.createChooser(
+                new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(mapUri)),
+                getString(R.string.navigate_with)));
+    }
 
     @OnClick(R.id.restaurant_thumbnail)
     public void onThumbnailClicked() {
@@ -233,16 +237,9 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         overridePendingTransition(0, 0);
     }
 
-    @OnClick(R.id.call_button)
-    public void callRestaurant() {
-        if (restaurant == null) {
-            return;
-        }
-
-        String phoneUri = "tel:" + restaurant.getPhoneNumber();
-        startActivity(Intent.createChooser(
-                new Intent(Intent.ACTION_DIAL, Uri.parse(phoneUri)),
-                getString(R.string.call_with)));
+    @OnClick(R.id.navigate_button)
+    public void onNavigateClicked() {
+        navigateToRestaurant();
     }
 
     @OnClick(R.id.share_button)
@@ -259,6 +256,18 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         if (shareIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(shareIntent);
         }
+    }
+
+    @OnClick(R.id.call_button)
+    public void callRestaurant() {
+        if (restaurant == null) {
+            return;
+        }
+
+        String phoneUri = "tel:" + restaurant.getPhoneNumber();
+        startActivity(Intent.createChooser(
+                new Intent(Intent.ACTION_DIAL, Uri.parse(phoneUri)),
+                getString(R.string.call_with)));
     }
 
     private void resetAndFindNewRestaurant() {
