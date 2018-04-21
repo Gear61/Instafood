@@ -14,8 +14,8 @@ import java.util.Set;
 
 public class PreferencesManager {
 
-    private SharedPreferences prefs;
     private static final String DISTANCE_UNIT_KEY = "distanceUnit";
+    private static final String NUM_OPENS_KEY = "numOpens";
 
     // Filter
     private static final String FILTER_RADIUS = "filterRadius";
@@ -38,6 +38,8 @@ public class PreferencesManager {
         }
         return instance;
     }
+
+    private SharedPreferences prefs;
 
     private PreferencesManager() {
         Context context = MyApplication.getAppContext();
@@ -83,5 +85,13 @@ public class PreferencesManager {
     private boolean getDefaultShakeValue() {
         // Turn off shake by default for Samsung Galaxy S3, since it doesn't hook into sensor APIs properly
         return !DeviceUtils.getDeviceName().equals("Samsung SAMSUNG-SGH-I747");
+    }
+
+    public int getNumAppOpens() {
+        return prefs.getInt(NUM_OPENS_KEY, 0);
+    }
+
+    public void logAppOpen() {
+        prefs.edit().putInt(NUM_OPENS_KEY, getNumAppOpens() + 1).apply();
     }
 }

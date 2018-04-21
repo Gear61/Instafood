@@ -77,6 +77,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PreferencesManager.get().logAppOpen();
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -156,6 +157,8 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
             if (googleMap != null) {
                 loadRestaurantLocationInMap();
             }
+
+            UIUtils.askForRatingIfAppropriate(MainActivity.this);
         }
 
         @Override

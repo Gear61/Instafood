@@ -45,4 +45,12 @@
     <string name="closing_at">Closes at %s</string>
     <string name="closing_time_unavailable">Closing time unavailable</string>
     <string name="open_24_hours">Open 24 hours</string>
+
+    <string name="please_rate">
+        Hey, it looks like you\'re a frequent user of Instafood!
+        If you have a couple seconds, please rate this app in the Play Store.
+        Every rating goes a long way towards motivating us to continue improving this app!
+    </string>
+    <string name="will_rate">Sure, I\'ll help</string>
+    <string name="no_im_good">No, I\'m good</string>
 </resources>
