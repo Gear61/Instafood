@@ -21,6 +21,7 @@ public class ClosingHourView {
 
     private static long MILLIS_IN_30_MINUTES = TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES);
     private static long MILLIS_IN_A_DAY = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
+    private static long MILLIS_FOR_NO_HOURS = -1;
 
     @BindView(R.id.hours_text) TextView hoursText;
     @BindView(R.id.skeleton_hours_text) View skeletonHoursText;
@@ -44,15 +45,14 @@ public class ClosingHourView {
                 hoursText.setTextColor(UIUtils.getColor(R.color.green));
                 hoursText.setText(R.string.open_24_hours);
             } else {
-                Calendar closingCalendar = getTodaysClosingTime(hoursInfo);
-                if (closingCalendar == null) {
+                long closingTimeMillis = getTodaysClosingTime(hoursInfo);
+                if (closingTimeMillis == MILLIS_FOR_NO_HOURS) {
                     hoursText.setTextColor(UIUtils.getColor(R.color.dark_gray));
                     hoursText.setText(R.string.closing_time_unavailable);
                 } else {
-                    long closingMillis = closingCalendar.getTimeInMillis();
                     long currentMillis = System.currentTimeMillis();
-                    String formattedClosingHour = TimeUtils.getHoursInfoText(closingCalendar);
-                    if (closingMillis - currentMillis <= MILLIS_IN_30_MINUTES) {
+                    String formattedClosingHour = TimeUtils.getHoursInfoText(closingTimeMillis);
+                    if (closingTimeMillis - currentMillis <= MILLIS_IN_30_MINUTES) {
                         hoursText.setTextColor(UIUtils.getColor(R.color.red));
                         hoursText.setText(String.format(
                                 StringUtils.getString(R.string.closing_at),
@@ -81,8 +81,7 @@ public class ClosingHourView {
         return false;
     }
 
-    @Nullable
-    private Calendar getTodaysClosingTime(List<DailyHours> hoursInfo) {
+    private long getTodaysClosingTime(List<DailyHours> hoursInfo) {
         int yelpCurrentDay = getYelpDayFromCurrentDay();
 
         boolean searchingLateAtNight = false;
@@ -125,10 +124,10 @@ public class ClosingHourView {
                     continue;
                 }
 
-                return closingCalendar;
+                return closingMillis;
             }
         }
-        return null;
+        return MILLIS_FOR_NO_HOURS;
     }
 
     private int getYelpDayFromCurrentDay() {
