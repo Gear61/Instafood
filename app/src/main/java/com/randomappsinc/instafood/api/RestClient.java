@@ -70,11 +70,14 @@ public class RestClient {
                 String finalSearchTerm = TextUtils.isEmpty(searchTerm)
                         ? ApiConstants.DEFAULT_SEARCH_TERM
                         : searchTerm;
+                int numResults = TextUtils.isEmpty(searchTerm)
+                        ? ApiConstants.NUM_RESTAURANT_RESULTS_NO_SEARCH_TERM
+                        : ApiConstants.NUM_RESTAURANT_RESULTS_WITH_SEARCH_TERM;
                 Filter filter = PreferencesManager.get().getFilter();
                 currentFindRestaurantsCall = yelpService.findRestaurants(
                         finalSearchTerm,
                         location,
-                        ApiConstants.DEFAULT_NUM_RESTAURANT_RESULTS,
+                        numResults,
                         true,
                         (int) filter.getRadius(),
                         filter.getPriceRangesString(),
