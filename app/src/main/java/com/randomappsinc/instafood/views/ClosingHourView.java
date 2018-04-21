@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 public class ClosingHourView {
 
     private static long MILLIS_IN_30_MINUTES = TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES);
+    private static long MILLIS_IN_A_DAY = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
 
     @BindView(R.id.hours_text) TextView hoursText;
     @BindView(R.id.skeleton_hours_text) View skeletonHoursText;
@@ -84,12 +85,12 @@ public class ClosingHourView {
     private Calendar getTodaysClosingTime(List<DailyHours> hoursInfo) {
         int yelpCurrentDay = getYelpDayFromCurrentDay();
 
-        boolean searchingAtNight = false;
+        boolean searchingLateAtNight = false;
         int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         // If the user is searching for something late at night (really early in the morning),
         // we need to get the hours for the previous day
         if (currentHour >= 0 && currentHour <= 4) {
-            searchingAtNight = true;
+            searchingLateAtNight = true;
             yelpCurrentDay--;
             // If it's currently Monday, we need to look for Sunday hours
             if (yelpCurrentDay < 0) {
@@ -103,17 +104,24 @@ public class ClosingHourView {
                 int closingHour = dailyHours.getEnd() / 100;
                 closingCalendar.set(Calendar.HOUR_OF_DAY, closingHour);
 
-                // If the restaurant is open until early morning, increase the day if we aren't searching at night
-                if (closingHour >= 0 && closingHour <= 4 && !searchingAtNight) {
-                    int currentDayInMonth = closingCalendar.get(Calendar.DAY_OF_MONTH);
-                    closingCalendar.set(Calendar.DAY_OF_MONTH, currentDayInMonth + 1);
-                }
-
                 int closingMinutes = dailyHours.getEnd() % 100;
                 closingCalendar.set(Calendar.MINUTE, closingMinutes);
 
+                long closingMillis = closingCalendar.getTimeInMillis();
+
+                boolean earlyMorningHours = closingHour >= 0 && closingHour <= 4;
+
+                // Add a day if we aren't searching at night and the hours are for early morning the next day
+                if (earlyMorningHours && !searchingLateAtNight) {
+                    closingMillis += MILLIS_IN_A_DAY;
+                }
+                // Remove a day if we are searching at night and the hours are for the previous day
+                else if (!earlyMorningHours && searchingLateAtNight) {
+                    closingMillis -= MILLIS_IN_A_DAY;
+                }
+
                 // Skip this hours object if it's for an old, irrelevant shift
-                if (closingCalendar.getTimeInMillis() < System.currentTimeMillis()) {
+                if (closingMillis < System.currentTimeMillis()) {
                     continue;
                 }
 
