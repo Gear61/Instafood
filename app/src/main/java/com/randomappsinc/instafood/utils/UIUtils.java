@@ -78,7 +78,9 @@ public class UIUtils {
     }
 
     public static void askForRatingIfAppropriate(final Activity activity) {
-        if (PreferencesManager.get().getNumAppOpens() == NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING) {
+        if (PreferencesManager.get().getNumAppOpens() == NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING
+                && PreferencesManager.get().getNumRatingAsks() == 0) {
+            PreferencesManager.get().logRatingAsk();
             new MaterialDialog.Builder(activity)
                     .content(R.string.please_rate)
                     .negativeText(R.string.no_im_good)

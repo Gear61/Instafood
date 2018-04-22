@@ -163,6 +163,7 @@ public class FilterActivity extends AppCompatActivity {
                 return true;
             case R.id.reset_all:
                 filter.reset();
+                restaurantFetcher.setSearchTerm("");
                 loadFilterIntoView();
                 return true;
         }

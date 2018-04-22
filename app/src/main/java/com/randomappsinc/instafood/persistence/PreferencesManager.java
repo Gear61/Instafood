@@ -16,6 +16,7 @@ public class PreferencesManager {
 
     private static final String DISTANCE_UNIT_KEY = "distanceUnit";
     private static final String NUM_OPENS_KEY = "numOpens";
+    private static final String NUM_RATING_ASKS_KEY = "numRatingAsks";
 
     // Filter
     private static final String FILTER_RADIUS = "filterRadius";
@@ -93,5 +94,13 @@ public class PreferencesManager {
 
     public void logAppOpen() {
         prefs.edit().putInt(NUM_OPENS_KEY, getNumAppOpens() + 1).apply();
+    }
+
+    public int getNumRatingAsks() {
+        return prefs.getInt(NUM_RATING_ASKS_KEY, 0);
+    }
+
+    public void logRatingAsk() {
+        prefs.edit().putInt(NUM_RATING_ASKS_KEY, getNumRatingAsks() + 1).apply();
     }
 }
