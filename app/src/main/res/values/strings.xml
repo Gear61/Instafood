@@ -7,7 +7,8 @@
     <string name="share_icon">{ion-android-share-alt}</string>
     <string name="user_icon">{ion-android-person}</string>
     <string name="close_icon">{ion-android-close}</string>
-    <string name="check_icon">{ion-checkmark}</string>
+    <string name="check_icon">{ion-checkmark-round}</string>
+    <string name="x_icon">{ion-close-round}</string>
 
     <string name="miles_away">%.1f mi</string>
     <string name="kilometers_away">%.1f km</string>
@@ -23,6 +24,9 @@
     <string name="no_reviews">There are no reviews attached to this restaurant.</string>
 
     <string name="additional_information"><u>Additional Information</u></string>
+    <string name="does_pickup_takeout">Does Pickup/Take-out</string>
+    <string name="delivers">Delivers</string>
+    <string name="takes_reservations">Takes Reservations</string>
 
     <string name="navigate">Navigate</string>
     <string name="call">Call</string>

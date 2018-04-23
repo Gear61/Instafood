@@ -162,6 +162,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
             if (googleMap != null) {
                 loadRestaurantLocationInMap();
             }
+            additionalInfoView.loadRestaurant(restaurant);
 
             UIUtils.askForRatingIfAppropriate(MainActivity.this);
         }

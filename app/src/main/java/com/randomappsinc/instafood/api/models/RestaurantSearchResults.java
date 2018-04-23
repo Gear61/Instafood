@@ -156,9 +156,9 @@ public class RestaurantSearchResults {
             restaurant.setLatitude(coordinates.getLatitude());
             restaurant.setLongitude(coordinates.getLongitude());
             restaurant.setDistance(distance);
-            restaurant.setSupportsDelivery(transactions.contains(RestaurantTransaction.PICKUP));
+            restaurant.setSupportsPickup(transactions.contains(RestaurantTransaction.PICKUP));
             restaurant.setSupportsDelivery(transactions.contains(RestaurantTransaction.DELIVERY));
-            restaurant.setSupportsDelivery(transactions.contains(RestaurantTransaction.RESERVATION));
+            restaurant.setSupportsReservations(transactions.contains(RestaurantTransaction.RESERVATION));
             ArrayList<String> restaurantCategories = new ArrayList<>();
             for (Category category : categories) {
                 restaurantCategories.add(category.getTitle());
