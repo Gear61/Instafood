@@ -7,6 +7,7 @@
     <string name="share_icon">{ion-android-share-alt}</string>
     <string name="user_icon">{ion-android-person}</string>
     <string name="close_icon">{ion-android-close}</string>
+    <string name="check_icon">{ion-checkmark}</string>
 
     <string name="miles_away">%.1f mi</string>
     <string name="kilometers_away">%.1f km</string>
@@ -20,6 +21,8 @@
     <string name="no_photos">There are no photos attached to this restaurant.</string>
     <string name="what_others_saying"><u>What People Are Saying</u></string>
     <string name="no_reviews">There are no reviews attached to this restaurant.</string>
+
+    <string name="additional_information"><u>Additional Information</u></string>
 
     <string name="navigate">Navigate</string>
     <string name="call">Call</string>

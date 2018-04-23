@@ -25,6 +25,9 @@ public class Restaurant implements Parcelable {
     private String fullAddress;
     private double latitude;
     private double longitude;
+    private boolean supportsPickup;
+    private boolean supportsDelivery;
+    private boolean supportsReservations;
     private ArrayList<String> categories;
     private ArrayList<String> photoUrls;
     private ArrayList<RestaurantReview> reviews;
@@ -130,6 +133,30 @@ public class Restaurant implements Parcelable {
         this.categories = categories;
     }
 
+    public boolean supportsPickup() {
+        return supportsPickup;
+    }
+
+    public void setSupportsPickup(boolean supportsPickup) {
+        this.supportsPickup = supportsPickup;
+    }
+
+    public boolean supportsDelivery() {
+        return supportsDelivery;
+    }
+
+    public void setSupportsDelivery(boolean supportsDelivery) {
+        this.supportsDelivery = supportsDelivery;
+    }
+
+    public boolean supportsReservations() {
+        return supportsReservations;
+    }
+
+    public void setSupportsReservations(boolean supportsReservations) {
+        this.supportsReservations = supportsReservations;
+    }
+
     public ArrayList<String> getPhotoUrls() {
         return photoUrls;
     }
@@ -195,20 +222,23 @@ public class Restaurant implements Parcelable {
         fullAddress = in.readString();
         latitude = in.readDouble();
         longitude = in.readDouble();
+        supportsPickup = in.readByte() != 0x00;
+        supportsDelivery = in.readByte() != 0x00;
+        supportsReservations = in.readByte() != 0x00;
         if (in.readByte() == 0x01) {
-            categories = new ArrayList<>();
+            categories = new ArrayList<String>();
             in.readList(categories, String.class.getClassLoader());
         } else {
             categories = null;
         }
         if (in.readByte() == 0x01) {
-            photoUrls = new ArrayList<>();
+            photoUrls = new ArrayList<String>();
             in.readList(photoUrls, String.class.getClassLoader());
         } else {
             photoUrls = null;
         }
         if (in.readByte() == 0x01) {
-            reviews = new ArrayList<>();
+            reviews = new ArrayList<RestaurantReview>();
             in.readList(reviews, RestaurantReview.class.getClassLoader());
         } else {
             reviews = null;
@@ -235,6 +265,9 @@ public class Restaurant implements Parcelable {
         dest.writeString(fullAddress);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
+        dest.writeByte((byte) (supportsPickup ? 0x01 : 0x00));
+        dest.writeByte((byte) (supportsDelivery ? 0x01 : 0x00));
+        dest.writeByte((byte) (supportsReservations ? 0x01 : 0x00));
         if (categories == null) {
             dest.writeByte((byte) (0x00));
         } else {

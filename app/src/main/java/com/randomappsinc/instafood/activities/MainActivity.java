@@ -35,6 +35,7 @@ import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.models.RestaurantReview;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
 import com.randomappsinc.instafood.utils.UIUtils;
+import com.randomappsinc.instafood.views.AdditionalInfoView;
 import com.randomappsinc.instafood.views.ClosingHourView;
 import com.randomappsinc.instafood.views.RestaurantInfoView;
 import com.squareup.seismic.ShakeDetector;
@@ -62,6 +63,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     @BindView(R.id.restaurant_photos) RecyclerView photosList;
     @BindView(R.id.reviews_stub) View reviewsStub;
     @BindView(R.id.reviews_container) LinearLayout reviewsContainer;
+    @BindView(R.id.additional_info_card) View additionalInfoCard;
 
     private RestaurantFetcher restaurantFetcher;
     private Restaurant restaurant;
@@ -70,6 +72,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     private RestaurantInfoView restaurantInfoView;
     private RestaurantPhotosAdapter photosAdapter;
     private RestaurantReviewsAdapter reviewsAdapter;
+    private AdditionalInfoView additionalInfoView;
     private LocationManager locationManager;
     private boolean denialLock;
     private ShakeDetector shakeDetector;
@@ -96,6 +99,8 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
                 this,
                 restaurantInfo,
                 new IconDrawable(this, IoniconsIcons.ion_location).colorRes(R.color.dark_gray));
+
+        additionalInfoView = new AdditionalInfoView(additionalInfoCard);
 
         restaurantFetcher = RestaurantFetcher.getInstance();
         restaurantFetcher.setListener(restaurantInfoListener);
@@ -279,13 +284,16 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         } else {
             restaurant = null;
             closingHourView.turnOnSkeletonLoading();
-            turnOnSkeletonLoading(!restaurantFetcher.canReturnRestaurantImmediately());
+            turnOnSkeletonLoading();
             restaurantFetcher.fetchRestaurant();
         }
     }
 
-    private void turnOnSkeletonLoading(boolean restaurantInfoIncluded) {
-        restaurantInfoView.setSkeletonVisibility(restaurantInfoIncluded);
+    private void turnOnSkeletonLoading() {
+        if (!restaurantFetcher.canReturnRestaurantImmediately()) {
+            restaurantInfoView.setSkeletonVisibility(true);
+            additionalInfoView.turnOnSkeletonLoading();
+        }
         photosList.setVisibility(View.INVISIBLE);
         photosStub.setVisibility(View.VISIBLE);
         reviewsContainer.setVisibility(View.GONE);

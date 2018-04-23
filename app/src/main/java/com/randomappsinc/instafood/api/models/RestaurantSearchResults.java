@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.randomappsinc.instafood.constants.RestaurantTransaction;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
 
@@ -136,6 +137,10 @@ public class RestaurantSearchResults {
             }
         }
 
+        @SerializedName("transactions")
+        @Expose
+        private List<String> transactions;
+
         Restaurant toRestaurant() {
             Restaurant restaurant = new Restaurant();
             restaurant.setId(id);
@@ -151,6 +156,9 @@ public class RestaurantSearchResults {
             restaurant.setLatitude(coordinates.getLatitude());
             restaurant.setLongitude(coordinates.getLongitude());
             restaurant.setDistance(distance);
+            restaurant.setSupportsDelivery(transactions.contains(RestaurantTransaction.PICKUP));
+            restaurant.setSupportsDelivery(transactions.contains(RestaurantTransaction.DELIVERY));
+            restaurant.setSupportsDelivery(transactions.contains(RestaurantTransaction.RESERVATION));
             ArrayList<String> restaurantCategories = new ArrayList<>();
             for (Category category : categories) {
                 restaurantCategories.add(category.getTitle());

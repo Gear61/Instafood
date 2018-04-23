@@ -1,23 +1,34 @@
 <resources>
-    <style name="hours_card">
+    <style name="generic_card">
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardCornerRadius">3dp</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="hours_card" parent="generic_card">
         <item name="android:layout_margin">8dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_gravity">bottom|center_horizontal</item>
-        <item name="cardUseCompatPadding">true</item>
-        <item name="cardCornerRadius">3dp</item>
-        <item name="cardElevation">2dp</item>
         <item name="contentPadding">4dp</item>
     </style>
 
-    <style name="action_card">
+    <style name="action_card" parent="generic_card">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
-        <item name="cardUseCompatPadding">true</item>
-        <item name="cardCornerRadius">3dp</item>
-        <item name="cardElevation">2dp</item>
+    </style>
+
+    <style name="additional_info_card" parent="generic_card">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="contentPaddingTop">8dp</item>
+        <item name="contentPaddingLeft">8dp</item>
+        <item name="contentPaddingRight">8dp</item>
     </style>
 
     <style name="action_container">
@@ -35,5 +46,15 @@
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
         <item name="layoutManager">android.support.v7.widget.LinearLayoutManager</item>
+    </style>
+
+    <style name="info_section_header">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">21dp</item>
     </style>
 </resources>
