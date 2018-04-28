@@ -108,7 +108,7 @@ public class ClosingHourView {
 
                 long closingMillis = closingCalendar.getTimeInMillis();
 
-                boolean earlyMorningHours = closingHour >= 0 && closingHour <= 4;
+                boolean earlyMorningHours = closingHour >= 0 && closingHour <= 6;
 
                 // Add a day if we aren't searching at night and the hours are for early morning the next day
                 if (earlyMorningHours && !searchingLateAtNight) {
