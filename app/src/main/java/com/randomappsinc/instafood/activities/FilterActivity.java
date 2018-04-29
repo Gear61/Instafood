@@ -1,6 +1,7 @@
 package com.randomappsinc.instafood.activities;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.view.Menu;
@@ -54,9 +55,10 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.filter);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(new IconDrawable(this, IoniconsIcons.ion_android_close)
+        ActionBar supportActionBar = getSupportActionBar();
+        supportActionBar.setDisplayShowTitleEnabled(false);
+        supportActionBar.setDisplayHomeAsUpEnabled(true);
+        supportActionBar.setHomeAsUpIndicator(new IconDrawable(this, IoniconsIcons.ion_android_close)
                 .colorRes(R.color.white)
                 .actionBarSize());
 
@@ -87,7 +89,7 @@ public class FilterActivity extends AppCompatActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {}
     };
 
-    private void setDistanceSliderText(int sliderValue) {
+    protected void setDistanceSliderText(int sliderValue) {
         double progressAdjusted = (double) (sliderValue + 1) / 10.0;
         String template = PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
                 ? radiusTemplateMiles

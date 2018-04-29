@@ -65,17 +65,17 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     @BindView(R.id.reviews_container) LinearLayout reviewsContainer;
     @BindView(R.id.additional_info_card) View additionalInfoCard;
 
-    private RestaurantFetcher restaurantFetcher;
-    private Restaurant restaurant;
-    private ClosingHourView closingHourView;
-    private GoogleMap googleMap;
-    private RestaurantInfoView restaurantInfoView;
-    private RestaurantPhotosAdapter photosAdapter;
-    private RestaurantReviewsAdapter reviewsAdapter;
-    private AdditionalInfoView additionalInfoView;
-    private LocationManager locationManager;
-    private boolean denialLock;
-    private ShakeDetector shakeDetector;
+    protected RestaurantFetcher restaurantFetcher;
+    protected Restaurant restaurant;
+    protected ClosingHourView closingHourView;
+    protected GoogleMap googleMap;
+    protected RestaurantInfoView restaurantInfoView;
+    protected RestaurantPhotosAdapter photosAdapter;
+    protected RestaurantReviewsAdapter reviewsAdapter;
+    protected AdditionalInfoView additionalInfoView;
+    protected LocationManager locationManager;
+    protected boolean denialLock;
+    protected ShakeDetector shakeDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +199,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         }
     }
 
-    private void loadRestaurantLocationInMap() {
+    protected void loadRestaurantLocationInMap() {
         googleMap.clear();
         LatLng coordinates = new LatLng(restaurant.getLatitude(), restaurant.getLongitude());
         googleMap.addMarker(new MarkerOptions()
@@ -221,7 +221,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         }
     };
 
-    private void navigateToRestaurant() {
+    protected void navigateToRestaurant() {
         if (restaurant == null) {
             return;
         }
@@ -239,7 +239,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         }
 
         Intent intent = new Intent(this, PictureFullViewActivity.class);
-        ArrayList<String> imageUrl = new ArrayList<>();
+        ArrayList<String> imageUrl = new ArrayList<>(1);
         imageUrl.add(restaurant.getImageUrl());
         intent.putStringArrayListExtra(PictureFullViewActivity.IMAGE_URLS_KEY, imageUrl);
         startActivity(intent);

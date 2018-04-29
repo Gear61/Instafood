@@ -97,7 +97,8 @@ public class ClosingHourView {
             }
         }
 
-        for (DailyHours dailyHours : hoursInfo) {
+        for (int i = 0, size = hoursInfo.size(); i < size; ++i) {
+            DailyHours dailyHours = hoursInfo.get(i);
             if (dailyHours.getDay() == yelpCurrentDay) {
                 Calendar closingCalendar = Calendar.getInstance();
                 int closingHour = dailyHours.getEnd() / 100;

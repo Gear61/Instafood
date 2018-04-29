@@ -22,7 +22,7 @@ public class DeviceUtils {
         char[] arr = str.toCharArray();
         boolean capitalizeNext = true;
 
-        StringBuilder phrase = new StringBuilder();
+        StringBuilder phrase = new StringBuilder(arr.length);
         for (char c : arr) {
             if (capitalizeNext && Character.isLetter(c)) {
                 phrase.append(Character.toUpperCase(c));

@@ -47,19 +47,19 @@ public class LocationManager implements LocationForm.Listener {
         }
     };
 
-    @NonNull private Listener listener;
-    @NonNull private Activity activity;
+    @NonNull protected Listener listener;
+    @NonNull protected Activity activity;
 
-    private FusedLocationProviderClient locationFetcher;
-    private LocationRequest locationRequest;
-    private boolean locationFetched;
+    protected FusedLocationProviderClient locationFetcher;
+    protected LocationRequest locationRequest;
+    protected boolean locationFetched;
 
-    private LocationServicesManager locationServicesManager;
-    private MaterialDialog locationDenialDialog;
-    private MaterialDialog locationPermissionDialog;
-    private LocationForm locationForm;
+    protected LocationServicesManager locationServicesManager;
+    protected MaterialDialog locationDenialDialog;
+    protected MaterialDialog locationPermissionDialog;
+    protected LocationForm locationForm;
 
-    private RestaurantFetcher restaurantFetcher;
+    protected RestaurantFetcher restaurantFetcher;
 
     public LocationManager(@NonNull Listener listener, @NonNull Activity activity) {
         this.listener = listener;
@@ -161,7 +161,7 @@ public class LocationManager implements LocationForm.Listener {
                 });
     }
 
-    private void requestLocationPermission() {
+    protected void requestLocationPermission() {
         PermissionUtils.requestPermission(
                 activity,
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -193,7 +193,7 @@ public class LocationManager implements LocationForm.Listener {
         }
     };
 
-    private void stopFetchingCurrentLocation() {
+    protected void stopFetchingCurrentLocation() {
         locationChecker.removeCallbacks(locationCheckTask);
         locationFetcher.removeLocationUpdates(locationCallback);
     }
@@ -206,7 +206,7 @@ public class LocationManager implements LocationForm.Listener {
         locationPermissionDialog.show();
     }
 
-    private void onLocationFetchFail() {
+    protected void onLocationFetchFail() {
         UIUtils.showLongToast(R.string.auto_location_fail);
     }
 }
