@@ -22,9 +22,11 @@ public class FetchRestaurantInfoCallback implements Callback<RestaurantInfo> {
 
     @Override
     public void onResponse(@NonNull Call<RestaurantInfo> call, @NonNull Response<RestaurantInfo> response) {
+        RestaurantFetcher restaurantFetcher = RestaurantFetcher.getInstance();
         if (response.code() == ApiConstants.HTTP_STATUS_OK) {
-            RestaurantFetcher.getInstance().onPhotosFetched(response.body().getPhotoUrls());
-            RestaurantFetcher.getInstance().onClosingTimeFetched(response.body().getHoursInfo());
+            RestaurantInfo restaurantInfo = response.body();
+            restaurantFetcher.onPhotosFetched(restaurantInfo.getPhotoUrls());
+            restaurantFetcher.onClosingTimeFetched(restaurantInfo.getHoursInfo());
         } else if (response.code() == ApiConstants.HTTP_STATUS_FORBIDDEN) {
             Converter<ResponseBody, BusinessInfoFetchError> errorConverter =
                     RestClient.getInstance().getRetrofitInstance()
@@ -32,7 +34,7 @@ public class FetchRestaurantInfoCallback implements Callback<RestaurantInfo> {
             try {
                 BusinessInfoFetchError error = errorConverter.convert(response.errorBody());
                 if (error.getCode().equals(ApiConstants.BUSINESS_UNAVAILABLE)) {
-                    RestaurantFetcher.getInstance().onPhotosFetched(new ArrayList<String>());
+                    restaurantFetcher.onPhotosFetched(new ArrayList<String>());
                 }
             } catch (IOException ignored) {}
         }

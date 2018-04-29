@@ -14,7 +14,7 @@ public class LocationForm {
         void onLocationEntered(String location);
     }
 
-    @NonNull private Listener listener;
+    @NonNull protected Listener listener;
     private MaterialDialog locationDialog;
 
     LocationForm(Context context, @NonNull Listener listener) {

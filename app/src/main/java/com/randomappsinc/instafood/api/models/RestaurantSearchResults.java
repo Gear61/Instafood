@@ -159,9 +159,9 @@ public class RestaurantSearchResults {
             restaurant.setSupportsPickup(transactions.contains(RestaurantTransaction.PICKUP));
             restaurant.setSupportsDelivery(transactions.contains(RestaurantTransaction.DELIVERY));
             restaurant.setSupportsReservations(transactions.contains(RestaurantTransaction.RESERVATION));
-            ArrayList<String> restaurantCategories = new ArrayList<>();
-            for (Category category : categories) {
-                restaurantCategories.add(category.getTitle());
+            ArrayList<String> restaurantCategories = new ArrayList<>(categories.size());
+            for (int i = 0, size = categories.size(); i < size; ++i) {
+                restaurantCategories.add(categories.get(i).getTitle());
             }
             restaurant.setCategories(restaurantCategories);
             return restaurant;
@@ -171,8 +171,9 @@ public class RestaurantSearchResults {
     public List<Restaurant> getRestaurants() {
         double filterDistance = PreferencesManager.get().getFilter().getRadius();
 
-        List<Restaurant> restaurants = new ArrayList<>();
-        for (Business business : businesses) {
+        List<Restaurant> restaurants = new ArrayList<>(businesses.size());
+        for (int i = 0, size = businesses.size(); i < size; ++i) {
+            Business business = businesses.get(i);
             // Filter out restaurants that are super far away, because Yelp API refuses to return empty lists
             if (business.getDistance() <= filterDistance) {
                 restaurants.add(business.toRestaurant());

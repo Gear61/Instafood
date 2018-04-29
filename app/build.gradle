@@ -6,8 +6,8 @@ android {
         applicationId "com.randomappsinc.instafood"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 17
-        versionName "1.1.6"
+        versionCode 18
+        versionName "1.1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
