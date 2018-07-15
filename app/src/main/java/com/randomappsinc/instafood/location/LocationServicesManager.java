@@ -21,8 +21,8 @@ import com.randomappsinc.instafood.utils.UIUtils;
 /** Utility class to ask for location services */
 class LocationServicesManager {
 
-    private Activity activity;
-    private LocationSettingsRequest.Builder locationBuilder;
+    protected Activity activity;
+    protected LocationSettingsRequest.Builder locationBuilder;
 
     LocationServicesManager(Activity activity) {
         this.activity = activity;
@@ -65,7 +65,7 @@ class LocationServicesManager {
     }
 
     // Get location services the old fashioned way
-    private void openLocationSettings() {
+    protected void openLocationSettings() {
         UIUtils.showLongToast(R.string.turn_on_location_services);
         activity.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
     }

@@ -27,9 +27,9 @@ public class RestaurantPhotosAdapter extends RecyclerView.Adapter<RestaurantPhot
         void onPhotoClicked(ArrayList<String> imageUrls, int position);
     }
 
-    @NonNull private Listener listener;
-    private ArrayList<String> photoUrls;
-    private Drawable defaultThumbnail;
+    @NonNull protected Listener listener;
+    protected ArrayList<String> photoUrls;
+    protected Drawable defaultThumbnail;
 
     public RestaurantPhotosAdapter(@NonNull Listener listener) {
         this.listener = listener;

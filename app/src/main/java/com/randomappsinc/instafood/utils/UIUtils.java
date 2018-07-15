@@ -64,7 +64,7 @@ public class UIUtils {
         showToast(stringId, Toast.LENGTH_LONG);
     }
 
-    private static void showToast(@StringRes int stringId, int toastLength) {
+    protected static void showToast(@StringRes int stringId, int toastLength) {
         Toast.makeText(MyApplication.getAppContext(), stringId, toastLength).show();
     }
 

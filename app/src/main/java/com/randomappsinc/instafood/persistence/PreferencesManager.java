@@ -28,7 +28,11 @@ public class PreferencesManager {
 
     public static PreferencesManager get() {
         if (instance == null) {
-            instance = getSync();
+            synchronized (PreferenceManager.class) {
+                if (instance == null) {
+                    instance = getSync();
+                }
+            }
         }
         return instance;
     }

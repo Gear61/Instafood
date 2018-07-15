@@ -23,18 +23,23 @@ public class RestClient {
 
     private static RestClient instance;
 
-    private Retrofit retrofit;
-    private YelpService yelpService;
-    private Handler handler;
+    protected Retrofit retrofit;
+    protected YelpService yelpService;
+    protected Handler handler;
 
-    private Call<RestaurantSearchResults> currentFindRestaurantsCall;
-    private Call<RestaurantInfo> currentFetchPhotosCall;
-    private Call<RestaurantReviewResults> currentFetchReviewsCall;
+    protected Call<RestaurantSearchResults> currentFindRestaurantsCall;
+    protected Call<RestaurantInfo> currentFetchPhotosCall;
+    protected Call<RestaurantReviewResults> currentFetchReviewsCall;
 
     public static RestClient getInstance() {
-        if (instance == null) {
-            instance = new RestClient();
+        if (instance == null ) {
+            synchronized (RestClient.class) {
+                if (instance == null) {
+                    instance = new RestClient();
+                }
+            }
         }
+
         return instance;
     }
 
