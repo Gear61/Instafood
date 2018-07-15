@@ -126,6 +126,8 @@
             </android.support.v7.widget.CardView>
         </LinearLayout>
 
+        <View style="@style/divider"/>
+
         <TextView
             android:layout_marginBottom="4dp"
             android:text="@string/photos"
@@ -157,6 +159,8 @@
             </LinearLayout>
         </FrameLayout>
 
+        <View style="@style/divider"/>
+
         <TextView
             android:text="@string/what_others_saying"
             style="@style/info_section_header"/>
@@ -183,6 +187,8 @@
 
             <include layout="@layout/skeleton_review_cell"/>
         </LinearLayout>
+
+        <View style="@style/divider"/>
 
         <TextView
             android:text="@string/additional_information"

@@ -51,10 +51,10 @@
     <style name="info_section_header">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
-        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">21dp</item>
     </style>
 
@@ -79,5 +79,12 @@
         <item name="android:layout_marginLeft">4dp</item>
         <item name="android:textColor">@color/dark_gray</item>
         <item name="android:textSize">17dp</item>
+    </style>
+
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:background">@color/gray_300</item>
     </style>
 </resources>
