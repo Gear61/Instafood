@@ -39,7 +39,7 @@ public class PictureFullViewFragment extends Fragment {
         }
 
         @Override
-        public void onError() {
+        public void onError(Exception exception) {
             Toast.makeText(getActivity(), R.string.image_load_fail, Toast.LENGTH_LONG).show();
         }
     };
@@ -60,7 +60,7 @@ public class PictureFullViewFragment extends Fragment {
 
         if (getArguments() != null) {
             String imageUrl = getArguments().getString(IMAGE_URL_KEY);
-            Picasso.with(getActivity())
+            Picasso.get()
                     .load(imageUrl)
                     .error(defaultThumbnail)
                     .fit()

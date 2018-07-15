@@ -1,6 +1,5 @@
 package com.randomappsinc.instafood.views;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,12 +37,10 @@ public class RestaurantInfoView {
 
     @BindDrawable(R.drawable.gray_border) Drawable grayBorder;
 
-    private Context context;
     private Drawable defaultThumbnail;
     private Restaurant restaurant;
 
-    public RestaurantInfoView(Context context, View view, Drawable defaultThumbnail) {
-        this.context = context;
+    public RestaurantInfoView(View view, Drawable defaultThumbnail) {
         this.defaultThumbnail = defaultThumbnail;
         ButterKnife.bind(this, view);
     }
@@ -67,7 +64,7 @@ public class RestaurantInfoView {
         String restaurantImageUrl = restaurant.getImageUrl();
         if (restaurantImageUrl != null && !restaurantImageUrl.isEmpty()) {
             thumbnail.setBackground(null);
-            Picasso.with(context)
+            Picasso.get()
                     .load(restaurantImageUrl)
                     .error(defaultThumbnail)
                     .fit().centerCrop()
@@ -77,13 +74,13 @@ public class RestaurantInfoView {
             thumbnail.setImageDrawable(defaultThumbnail);
         }
         name.setText(restaurant.getName());
-        Picasso.with(context)
+        Picasso.get()
                 .load(UIUtils.getRatingDrawableId(restaurant.getRating()))
                 .into(rating);
 
         String numReviewsText = restaurant.getReviewCount() == 1
-                ? context.getString(R.string.one_review)
-                : String.format(context.getString(R.string.num_reviews), restaurant.getReviewCount());
+                ? StringUtils.getString(R.string.one_review)
+                : String.format(StringUtils.getString(R.string.num_reviews), restaurant.getReviewCount());
         numReviews.setText(numReviewsText);
 
         address.setText(restaurant.getAddress());

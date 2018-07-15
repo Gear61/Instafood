@@ -1,6 +1,5 @@
 package com.randomappsinc.instafood.adapters;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +11,7 @@ import android.widget.ImageView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.instafood.R;
+import com.randomappsinc.instafood.utils.MyApplication;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,15 +28,15 @@ public class RestaurantPhotosAdapter extends RecyclerView.Adapter<RestaurantPhot
     }
 
     @NonNull private Listener listener;
-    private Context context;
     private ArrayList<String> photoUrls;
     private Drawable defaultThumbnail;
 
-    public RestaurantPhotosAdapter(Context context, @NonNull Listener listener) {
+    public RestaurantPhotosAdapter(@NonNull Listener listener) {
         this.listener = listener;
-        this.context = context;
         this.photoUrls = new ArrayList<>();
-        this.defaultThumbnail = new IconDrawable(this.context, IoniconsIcons.ion_image).colorRes(R.color.dark_gray);
+        this.defaultThumbnail = new IconDrawable(
+                MyApplication.getAppContext(),
+                IoniconsIcons.ion_image).colorRes(R.color.dark_gray);
     }
 
     public void setPhotoUrls(List<String> photoUrls) {
@@ -47,7 +47,8 @@ public class RestaurantPhotosAdapter extends RecyclerView.Adapter<RestaurantPhot
 
     @Override
     public RestaurantPhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.restaurant_photo_cell, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.restaurant_photo_cell, parent, false);
         return new RestaurantPhotoViewHolder(itemView);
     }
 
@@ -78,7 +79,7 @@ public class RestaurantPhotosAdapter extends RecyclerView.Adapter<RestaurantPhot
             } else {
                 noPhotos.setVisibility(View.GONE);
                 photoView.setVisibility(View.VISIBLE);
-                Picasso.with(context)
+                Picasso.get()
                         .load(photoUrls.get(position))
                         .error(defaultThumbnail)
                         .fit()

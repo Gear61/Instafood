@@ -22,7 +22,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.api.RestaurantFetcher;
 import com.randomappsinc.instafood.utils.PermissionUtils;
-import com.randomappsinc.instafood.utils.UIUtils;
 
 public class LocationManager implements LocationForm.Listener {
 
@@ -31,6 +30,7 @@ public class LocationManager implements LocationForm.Listener {
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 9001;
 
     private static final long DESIRED_LOCATION_TURNAROUND = 1000L;
+    private static final long MILLISECONDS_BEFORE_FAILURE = 10000L;
 
     public interface Listener {
         void onServicesOrPermissionChoice();
@@ -86,7 +86,7 @@ public class LocationManager implements LocationForm.Listener {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        locationForm.show();
+                        locationForm.show(R.string.location_form_prompt);
                         listener.onServicesOrPermissionChoice();
                     }
                 })
@@ -108,7 +108,7 @@ public class LocationManager implements LocationForm.Listener {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        locationForm.show();
+                        locationForm.show(R.string.location_form_prompt);
                         listener.onServicesOrPermissionChoice();
                     }
                 })
@@ -171,6 +171,7 @@ public class LocationManager implements LocationForm.Listener {
     public void fetchAutomaticLocation() {
         locationFetched = false;
         try {
+            locationChecker.postDelayed(locationCheckTask, MILLISECONDS_BEFORE_FAILURE);
             locationFetcher.requestLocationUpdates(locationRequest, locationCallback, null);
         } catch (SecurityException exception) {
             requestLocationPermission();
@@ -189,6 +190,8 @@ public class LocationManager implements LocationForm.Listener {
                         + String.valueOf(location.getLongitude());
                 restaurantFetcher.setLocation(latLongString);
                 restaurantFetcher.fetchRestaurant();
+            } else {
+                onLocationFetchFail();
             }
         }
     };
@@ -207,6 +210,6 @@ public class LocationManager implements LocationForm.Listener {
     }
 
     private void onLocationFetchFail() {
-        UIUtils.showLongToast(R.string.auto_location_fail);
+        locationForm.show(R.string.location_form_after_fail);
     }
 }

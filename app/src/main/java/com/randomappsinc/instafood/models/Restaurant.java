@@ -226,19 +226,19 @@ public class Restaurant implements Parcelable {
         supportsDelivery = in.readByte() != 0x00;
         supportsReservations = in.readByte() != 0x00;
         if (in.readByte() == 0x01) {
-            categories = new ArrayList<String>();
+            categories = new ArrayList<>();
             in.readList(categories, String.class.getClassLoader());
         } else {
             categories = null;
         }
         if (in.readByte() == 0x01) {
-            photoUrls = new ArrayList<String>();
+            photoUrls = new ArrayList<>();
             in.readList(photoUrls, String.class.getClassLoader());
         } else {
             photoUrls = null;
         }
         if (in.readByte() == 0x01) {
-            reviews = new ArrayList<RestaurantReview>();
+            reviews = new ArrayList<>();
             in.readList(reviews, RestaurantReview.class.getClassLoader());
         } else {
             reviews = null;

@@ -3,6 +3,10 @@
     <string name="location">Location</string>
     <string name="location_form_title">Set Location</string>
     <string name="location_form_prompt">Where do you want Instafood to search?</string>
+    <string name="location_form_after_fail">
+        We failed to fetch your current location.
+        Please tell Instafood where you want it to search.
+    </string>
 
     <string name="auto_location_fail">
         We couldn\'t get your current location.

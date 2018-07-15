@@ -41,7 +41,7 @@ public class RestaurantReviewsAdapter implements RestaurantReviewCell.Listener {
                         reviewContainer,
                         false);
                 RestaurantReviewCell restaurantReviewCell = new RestaurantReviewCell(reviewCellParent, this);
-                restaurantReviewCell.loadReview(review, context);
+                restaurantReviewCell.loadReview(review);
                 reviewContainer.addView(reviewCellParent);
             }
         }

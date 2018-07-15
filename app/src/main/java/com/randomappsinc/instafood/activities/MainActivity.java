@@ -91,12 +91,11 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         restaurantMap.onCreate(savedInstanceState);
         restaurantMap.getMapAsync(this);
 
-        photosAdapter = new RestaurantPhotosAdapter(this, this);
+        photosAdapter = new RestaurantPhotosAdapter(this);
         photosList.setAdapter(photosAdapter);
         reviewsAdapter = new RestaurantReviewsAdapter(this);
 
         restaurantInfoView = new RestaurantInfoView(
-                this,
                 restaurantInfo,
                 new IconDrawable(this, IoniconsIcons.ion_location).colorRes(R.color.dark_gray));
 

@@ -1,6 +1,5 @@
 package com.randomappsinc.instafood.views;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +9,7 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.models.RestaurantReview;
+import com.randomappsinc.instafood.utils.MyApplication;
 import com.randomappsinc.instafood.utils.UIUtils;
 import com.squareup.picasso.Picasso;
 
@@ -39,10 +39,10 @@ public class RestaurantReviewCell {
         this.listener = listener;
     }
 
-    public void loadReview(RestaurantReview review, Context context) {
+    public void loadReview(RestaurantReview review) {
         this.review = review;
 
-        Drawable defaultThumbnail = new IconDrawable(context, IoniconsIcons.ion_android_person)
+        Drawable defaultThumbnail = new IconDrawable(MyApplication.getAppContext(), IoniconsIcons.ion_android_person)
                 .colorRes(R.color.dark_gray);
 
         String userImageUrl = review.getUserImageUrl();
@@ -52,7 +52,7 @@ public class RestaurantReviewCell {
         } else {
             userIcon.setVisibility(View.GONE);
             userImage.setVisibility(View.VISIBLE);
-            Picasso.with(context)
+            Picasso.get()
                     .load(review.getUserImageUrl())
                     .error(defaultThumbnail)
                     .fit()
@@ -64,7 +64,7 @@ public class RestaurantReviewCell {
         userName.setText(review.getUsername());
         reviewText.setText(review.getText());
 
-        Picasso.with(context)
+        Picasso.get()
                 .load(UIUtils.getRatingDrawableId(review.getRating()))
                 .into(rating);
         reviewDate.setText(review.getTimeCreatedText());

@@ -19,7 +19,7 @@
             android:value="@string/google_maps_api_key"/>
 
         <activity
-            android:name="com.randomappsinc.instafood.activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation|screenSize">
 
             <intent-filter>
@@ -29,7 +29,7 @@
         </activity>
 
         <activity
-            android:name="com.randomappsinc.instafood.activities.PictureFullViewActivity"
+            android:name="activities.PictureFullViewActivity"
             android:theme="@style/AppTheme.PictureFullView"
             android:configChanges="orientation|screenSize">
         </activity>
