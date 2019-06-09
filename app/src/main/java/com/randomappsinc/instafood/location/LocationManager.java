@@ -186,9 +186,7 @@ public class LocationManager implements LocationForm.Listener {
                 stopFetchingCurrentLocation();
                 locationFetched = true;
                 Location location = locationResult.getLastLocation();
-                String latLongString = String.valueOf(location.getLatitude())
-                        + ", "
-                        + String.valueOf(location.getLongitude());
+                String latLongString = location.getLatitude() + ", " + location.getLongitude();
                 restaurantFetcher.setLocation(latLongString);
                 restaurantFetcher.fetchRestaurant();
             } else {

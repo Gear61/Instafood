@@ -9,10 +9,8 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.IconDrawable;
@@ -86,17 +84,14 @@ public class UIUtils {
                     .content(R.string.please_rate)
                     .negativeText(R.string.no_im_good)
                     .positiveText(R.string.will_rate)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Uri uri = Uri.parse("market://details?id=" + activity.getPackageName());
-                            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                            if (!(activity.getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                                UIUtils.showToast(R.string.play_store_error, Toast.LENGTH_LONG);
-                                return;
-                            }
-                            activity.startActivity(intent);
+                    .onPositive((dialog, which) -> {
+                        Uri uri = Uri.parse("market://details?id=" + activity.getPackageName());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        if (!(activity.getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
+                            UIUtils.showToast(R.string.play_store_error, Toast.LENGTH_LONG);
+                            return;
                         }
+                        activity.startActivity(intent);
                     })
                     .show();
         }

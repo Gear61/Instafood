@@ -1,7 +1,6 @@
 package com.randomappsinc.instafood.dialogs;
 
 import android.content.Context;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.randomappsinc.instafood.R;
@@ -21,19 +20,13 @@ public class DistanceUnitChooser {
                 .title(R.string.set_distance_unit_title)
                 .content(R.string.distance_unit_prompt)
                 .items(R.array.distance_unit_options)
-                .itemsCallbackSingleChoice(currentPosition, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog,
-                                               View itemView,
-                                               int which,
-                                               CharSequence text) {
-                        @DistanceUnit String chosenUnit = which == 0
-                                ? DistanceUnit.MILES
-                                : DistanceUnit.KILOMETERS;
-                        PreferencesManager.get().setDistanceUnit(chosenUnit);
-                        UIUtils.showLongToast(R.string.distance_unit_set);
-                        return true;
-                    }
+                .itemsCallbackSingleChoice(currentPosition, (dialog, itemView, which, text) -> {
+                    @DistanceUnit String chosenUnit = which == 0
+                            ? DistanceUnit.MILES
+                            : DistanceUnit.KILOMETERS;
+                    PreferencesManager.get().setDistanceUnit(chosenUnit);
+                    UIUtils.showLongToast(R.string.distance_unit_set);
+                    return true;
                 })
                 .positiveText(R.string.choose)
                 .negativeText(R.string.cancel)
