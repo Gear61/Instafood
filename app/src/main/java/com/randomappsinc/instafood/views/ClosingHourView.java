@@ -1,5 +1,6 @@
 package com.randomappsinc.instafood.views;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
@@ -7,7 +8,6 @@ import androidx.annotation.Nullable;
 
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.api.models.DailyHours;
-import com.randomappsinc.instafood.utils.StringUtils;
 import com.randomappsinc.instafood.utils.TimeUtils;
 import com.randomappsinc.instafood.utils.UIUtils;
 
@@ -38,30 +38,31 @@ public class ClosingHourView {
 
     public void setHours(@Nullable List<DailyHours> hoursInfo) {
         skeletonHoursText.setVisibility(View.GONE);
+        Context context = hoursText.getContext();
         if (hoursInfo == null) {
-            hoursText.setTextColor(UIUtils.getColor(R.color.dark_gray));
+            hoursText.setTextColor(UIUtils.getColor(R.color.dark_gray, context));
             hoursText.setText(R.string.closing_time_unavailable);
         } else {
             if (isOpen24Hours(hoursInfo)) {
-                hoursText.setTextColor(UIUtils.getColor(R.color.green));
+                hoursText.setTextColor(UIUtils.getColor(R.color.green, context));
                 hoursText.setText(R.string.open_24_hours);
             } else {
                 long closingTimeMillis = getTodaysClosingTime(hoursInfo);
                 if (closingTimeMillis == MILLIS_FOR_NO_HOURS) {
-                    hoursText.setTextColor(UIUtils.getColor(R.color.dark_gray));
+                    hoursText.setTextColor(UIUtils.getColor(R.color.dark_gray, context));
                     hoursText.setText(R.string.closing_time_unavailable);
                 } else {
                     long currentMillis = System.currentTimeMillis();
                     String formattedClosingHour = TimeUtils.getHoursInfoText(closingTimeMillis);
                     if (closingTimeMillis - currentMillis <= MILLIS_IN_30_MINUTES) {
-                        hoursText.setTextColor(UIUtils.getColor(R.color.red));
+                        hoursText.setTextColor(UIUtils.getColor(R.color.red, context));
                         hoursText.setText(String.format(
-                                StringUtils.getString(R.string.closing_at),
+                                context.getString(R.string.closing_at),
                                 formattedClosingHour));
                     } else {
-                        hoursText.setTextColor(UIUtils.getColor(R.color.green));
+                        hoursText.setTextColor(UIUtils.getColor(R.color.green, context));
                         hoursText.setText(String.format(
-                                StringUtils.getString(R.string.open_until),
+                                context.getString(R.string.open_until),
                                 formattedClosingHour));
                     }
                 }

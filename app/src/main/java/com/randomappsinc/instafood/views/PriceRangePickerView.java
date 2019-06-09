@@ -1,5 +1,6 @@
 package com.randomappsinc.instafood.views;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -54,19 +55,20 @@ public class PriceRangePickerView {
     private void initPriceDescriptors() {
         String curSymbol = StringUtils.getCurrencySymbol();
 
-        String cheap = StringUtils.getString(R.string.cheap);
+        Context context = cheapText.getContext();
+        String cheap = context.getString(R.string.cheap);
         String cheapDescriptor = cheap + " (" + curSymbol + ")";
         cheapText.setText(cheapDescriptor);
 
-        String moderate = StringUtils.getString(R.string.moderate);
+        String moderate = context.getString(R.string.moderate);
         String moderateDescriptor = moderate + " (" + curSymbol + curSymbol + ")";
         moderateText.setText(moderateDescriptor);
 
-        String pricey = StringUtils.getString(R.string.pricey);
+        String pricey = context.getString(R.string.pricey);
         String priceyDescriptor = pricey + " (" + curSymbol + curSymbol + curSymbol + ")";
         priceyText.setText(priceyDescriptor);
 
-        String veryExpensive = StringUtils.getString(R.string.very_expensive);
+        String veryExpensive = context.getString(R.string.very_expensive);
         String veryExpensiveDescriptor = veryExpensive
                 + " (" + curSymbol + curSymbol + curSymbol + curSymbol + ")";
         veryExpensiveText.setText(veryExpensiveDescriptor);

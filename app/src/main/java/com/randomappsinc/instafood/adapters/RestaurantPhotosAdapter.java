@@ -1,5 +1,6 @@
 package com.randomappsinc.instafood.adapters;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.instafood.R;
-import com.randomappsinc.instafood.utils.MyApplication;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -32,11 +32,11 @@ public class RestaurantPhotosAdapter extends RecyclerView.Adapter<RestaurantPhot
     protected ArrayList<String> photoUrls;
     protected Drawable defaultThumbnail;
 
-    public RestaurantPhotosAdapter(@NonNull Listener listener) {
+    public RestaurantPhotosAdapter(@NonNull Listener listener, Context context) {
         this.listener = listener;
         this.photoUrls = new ArrayList<>();
         this.defaultThumbnail = new IconDrawable(
-                MyApplication.getAppContext(),
+                context,
                 IoniconsIcons.ion_image).colorRes(R.color.dark_gray);
     }
 

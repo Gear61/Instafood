@@ -1,5 +1,6 @@
 package com.randomappsinc.instafood.models;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,7 +8,6 @@ import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
 import com.randomappsinc.instafood.utils.DistanceUtils;
-import com.randomappsinc.instafood.utils.StringUtils;
 
 import java.util.ArrayList;
 
@@ -173,8 +173,9 @@ public class Restaurant implements Parcelable {
         this.reviews = reviews;
     }
 
-    public double getDistanceToShow() {
-        return PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
+    public double getDistanceToShow(Context context) {
+        PreferencesManager preferencesManager = new PreferencesManager(context);
+        return preferencesManager.getDistanceUnit().equals(DistanceUnit.MILES)
                 ? DistanceUtils.getMilesFromMeters(distance)
                 : DistanceUtils.getKilometersFromMeters(distance);
     }
@@ -190,23 +191,23 @@ public class Restaurant implements Parcelable {
         return categoriesList.toString();
     }
 
-    public String getShareText() {
-        String template = StringUtils.getString(R.string.share_template);
+    public String getShareText(Context context) {
+        String template = context.getString(R.string.share_template);
         return String.format(
                 template,
                 name,
-                getRatingShareText(),
+                getRatingShareText(context),
                 fullAddress,
                 getCategoriesListText(),
                 phoneNumber,
                 yelpUrl);
     }
 
-    private String getRatingShareText() {
+    private String getRatingShareText(Context context) {
         String reviewText = reviewCount == 1
-                ? StringUtils.getString(R.string.one_review)
-                : String.format(StringUtils.getString(R.string.num_reviews), reviewCount);
-        return String.valueOf(rating) + "/5 (" + reviewText + ")";
+                ? context.getString(R.string.one_review)
+                : String.format(context.getString(R.string.num_reviews), reviewCount);
+        return (rating) + "/5 (" + reviewText + ")";
     }
 
     protected Restaurant(Parcel in) {

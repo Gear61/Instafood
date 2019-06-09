@@ -9,7 +9,6 @@ import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.models.RestaurantReview;
-import com.randomappsinc.instafood.utils.MyApplication;
 import com.randomappsinc.instafood.utils.UIUtils;
 import com.squareup.picasso.Picasso;
 
@@ -42,7 +41,7 @@ public class RestaurantReviewCell {
     public void loadReview(RestaurantReview review) {
         this.review = review;
 
-        Drawable defaultThumbnail = new IconDrawable(MyApplication.getAppContext(), IoniconsIcons.ion_android_person)
+        Drawable defaultThumbnail = new IconDrawable(userImage.getContext(), IoniconsIcons.ion_android_person)
                 .colorRes(R.color.dark_gray);
 
         String userImageUrl = review.getUserImageUrl();

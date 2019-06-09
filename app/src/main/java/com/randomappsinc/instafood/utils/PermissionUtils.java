@@ -1,6 +1,7 @@
 package com.randomappsinc.instafood.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 
 import androidx.core.app.ActivityCompat;
@@ -12,8 +13,8 @@ public class PermissionUtils {
         ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
     }
 
-    public static boolean isPermissionGranted(String permission) {
-        return ContextCompat.checkSelfPermission(MyApplication.getAppContext(), permission)
+    public static boolean isPermissionGranted(String permission, Context context) {
+        return ContextCompat.checkSelfPermission(context, permission)
                 == PackageManager.PERMISSION_GRANTED;
     }
 }

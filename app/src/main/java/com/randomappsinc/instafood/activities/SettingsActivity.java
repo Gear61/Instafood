@@ -31,16 +31,16 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
     @BindString(R.string.send_email) String sendEmail;
 
     private DistanceUnitChooser distanceUnitChooser;
+    private PreferencesManager preferencesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
         ButterKnife.bind(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        preferencesManager = new PreferencesManager(this);
 
         settingsOptions.addItemDecoration(new SimpleDividerItemDecoration(this));
         settingsOptions.setAdapter(new SettingsAdapter(this, this));
@@ -56,7 +56,7 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
                 Switch shakeToggle = firstCell.findViewById(R.id.shake_toggle);
                 boolean currentState = shakeToggle.isChecked();
                 shakeToggle.setChecked(!currentState);
-                PreferencesManager.get().setShakeEnabled(!currentState);
+                preferencesManager.setShakeEnabled(!currentState);
                 return;
             case 1:
                 distanceUnitChooser.show();
@@ -83,7 +83,7 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
                 Uri uri =  Uri.parse("market://details?id=" + getPackageName());
                 intent = new Intent(Intent.ACTION_VIEW, uri);
                 if (!(getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                    UIUtils.showLongToast(R.string.play_store_error);
+                    UIUtils.showLongToast(R.string.play_store_error, this);
                     return;
                 }
                 break;

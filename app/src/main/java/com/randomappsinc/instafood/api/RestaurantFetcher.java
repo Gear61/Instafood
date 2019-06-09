@@ -1,6 +1,7 @@
 package com.randomappsinc.instafood.api;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -80,12 +81,12 @@ public class RestaurantFetcher {
         return !restaurantPool.isEmpty();
     }
 
-    public void fetchRestaurant() {
+    public void fetchRestaurant(Context context) {
         restClient.cancelPhotosFetch();
         restClient.cancelReviewsFetch();
 
         if (restaurantPool.isEmpty()) {
-            restClient.findRestaurants(location, searchTerm);
+            restClient.findRestaurants(location, searchTerm, context);
         } else {
             returnRestaurant();
         }

@@ -77,11 +77,13 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     protected LocationManager locationManager;
     protected boolean denialLock;
     protected ShakeDetector shakeDetector;
+    private PreferencesManager preferencesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PreferencesManager.get().logAppOpen();
+        preferencesManager = new PreferencesManager(this);
+        preferencesManager.logAppOpen();
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -92,7 +94,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         restaurantMap.onCreate(savedInstanceState);
         restaurantMap.getMapAsync(this);
 
-        photosAdapter = new RestaurantPhotosAdapter(this);
+        photosAdapter = new RestaurantPhotosAdapter(this, this);
         photosList.setAdapter(photosAdapter);
         reviewsAdapter = new RestaurantReviewsAdapter(this);
 
@@ -146,7 +148,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
             locationManager.fetchCurrentLocation();
         }
 
-        if (PreferencesManager.get().isShakeEnabled()) {
+        if (preferencesManager.isShakeEnabled()) {
             shakeDetector.start((SensorManager) getSystemService(SENSOR_SERVICE));
         }
     }
@@ -214,12 +216,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    private final GoogleMap.OnMapClickListener mapClickListener = new GoogleMap.OnMapClickListener() {
-        @Override
-        public void onMapClick(LatLng latLng) {
-            navigateToRestaurant();
-        }
-    };
+    private final GoogleMap.OnMapClickListener mapClickListener = latLng -> navigateToRestaurant();
 
     protected void navigateToRestaurant() {
         if (restaurant == null) {
@@ -260,7 +257,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         Intent shareIntent = ShareCompat.IntentBuilder.from(this)
                 .setChooserTitle(R.string.share_restaurant_with)
                 .setType("text/plain")
-                .setText(restaurant.getShareText())
+                .setText(restaurant.getShareText(this))
                 .getIntent();
         if (shareIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(shareIntent);
@@ -286,7 +283,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
             restaurant = null;
             closingHourView.turnOnSkeletonLoading();
             turnOnSkeletonLoading();
-            restaurantFetcher.fetchRestaurant();
+            restaurantFetcher.fetchRestaurant(this);
         }
     }
 
@@ -338,7 +335,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         switch (requestCode) {
             case LocationManager.LOCATION_SERVICES_CODE:
                 if (resultCode == RESULT_OK) {
-                    UIUtils.showLongToast(R.string.location_services_on);
+                    UIUtils.showLongToast(R.string.location_services_on, this);
                     locationManager.fetchAutomaticLocation();
                 } else {
                     denialLock = true;
@@ -376,7 +373,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         super.onPause();
         restaurantMap.onPause();
 
-        if (PreferencesManager.get().isShakeEnabled()) {
+        if (preferencesManager.isShakeEnabled()) {
             shakeDetector.stop();
         }
     }

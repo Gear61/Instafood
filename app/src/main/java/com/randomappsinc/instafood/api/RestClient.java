@@ -1,5 +1,6 @@
 package com.randomappsinc.instafood.api;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
@@ -65,30 +66,28 @@ public class RestClient {
         return retrofit;
     }
 
-    void findRestaurants(final String location, final String searchTerm) {
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (currentFindRestaurantsCall != null) {
-                    currentFindRestaurantsCall.cancel();
-                }
-                String finalSearchTerm = TextUtils.isEmpty(searchTerm)
-                        ? ApiConstants.DEFAULT_SEARCH_TERM
-                        : searchTerm;
-                int numResults = TextUtils.isEmpty(searchTerm)
-                        ? ApiConstants.NUM_RESTAURANT_RESULTS_NO_SEARCH_TERM
-                        : ApiConstants.NUM_RESTAURANT_RESULTS_WITH_SEARCH_TERM;
-                Filter filter = PreferencesManager.get().getFilter();
-                currentFindRestaurantsCall = yelpService.findRestaurants(
-                        finalSearchTerm,
-                        location,
-                        numResults,
-                        true,
-                        (int) filter.getRadius(),
-                        filter.getPriceRangesString(),
-                        filter.getAttributesString());
-                currentFindRestaurantsCall.enqueue(new FindRestaurantsCallback());
+    void findRestaurants(final String location, final String searchTerm, Context context) {
+        PreferencesManager preferencesManager = new PreferencesManager(context);
+        Filter filter = preferencesManager.getFilter();
+        handler.post(() -> {
+            if (currentFindRestaurantsCall != null) {
+                currentFindRestaurantsCall.cancel();
             }
+            String finalSearchTerm = TextUtils.isEmpty(searchTerm)
+                    ? ApiConstants.DEFAULT_SEARCH_TERM
+                    : searchTerm;
+            int numResults = TextUtils.isEmpty(searchTerm)
+                    ? ApiConstants.NUM_RESTAURANT_RESULTS_NO_SEARCH_TERM
+                    : ApiConstants.NUM_RESTAURANT_RESULTS_WITH_SEARCH_TERM;
+            currentFindRestaurantsCall = yelpService.findRestaurants(
+                    finalSearchTerm,
+                    location,
+                    numResults,
+                    true,
+                    (int) filter.getRadius(),
+                    filter.getPriceRangesString(),
+                    filter.getAttributesString());
+            currentFindRestaurantsCall.enqueue(new FindRestaurantsCallback(context));
         });
     }
 

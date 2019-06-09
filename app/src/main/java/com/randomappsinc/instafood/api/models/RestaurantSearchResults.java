@@ -1,5 +1,6 @@
 package com.randomappsinc.instafood.api.models;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.Expose;
@@ -168,8 +169,9 @@ public class RestaurantSearchResults {
         }
     }
 
-    public List<Restaurant> getRestaurants() {
-        double filterDistance = PreferencesManager.get().getFilter().getRadius();
+    public List<Restaurant> getRestaurants(Context context) {
+        PreferencesManager preferencesManager = new PreferencesManager(context);
+        double filterDistance = preferencesManager.getFilter().getRadius();
 
         List<Restaurant> restaurants = new ArrayList<>(businesses.size());
         for (int i = 0, size = businesses.size(); i < size; ++i) {

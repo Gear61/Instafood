@@ -1,5 +1,6 @@
 package com.randomappsinc.instafood.views;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,7 +10,6 @@ import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.models.Restaurant;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
-import com.randomappsinc.instafood.utils.StringUtils;
 import com.randomappsinc.instafood.utils.UIUtils;
 import com.squareup.picasso.Picasso;
 
@@ -39,10 +39,12 @@ public class RestaurantInfoView {
 
     private Drawable defaultThumbnail;
     private Restaurant restaurant;
+    private boolean showMiles;
 
     public RestaurantInfoView(View view, Drawable defaultThumbnail) {
         this.defaultThumbnail = defaultThumbnail;
         ButterKnife.bind(this, view);
+        showMiles = (new PreferencesManager(view.getContext())).getDistanceUnit().equals(DistanceUnit.MILES);
     }
 
     public void setSkeletonVisibility(boolean skeletonVisible) {
@@ -60,6 +62,8 @@ public class RestaurantInfoView {
     public void loadRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
         setSkeletonVisibility(false);
+
+        Context context = thumbnail.getContext();
 
         String restaurantImageUrl = restaurant.getImageUrl();
         if (restaurantImageUrl != null && !restaurantImageUrl.isEmpty()) {
@@ -79,8 +83,8 @@ public class RestaurantInfoView {
                 .into(rating);
 
         String numReviewsText = restaurant.getReviewCount() == 1
-                ? StringUtils.getString(R.string.one_review)
-                : String.format(StringUtils.getString(R.string.num_reviews), restaurant.getReviewCount());
+                ? context.getString(R.string.one_review)
+                : String.format(context.getString(R.string.num_reviews), restaurant.getReviewCount());
         numReviews.setText(numReviewsText);
 
         address.setText(restaurant.getAddress());
@@ -108,10 +112,11 @@ public class RestaurantInfoView {
             return;
         }
 
-        String distanceTemplate = PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
-                ? StringUtils.getString(R.string.miles_away)
-                : StringUtils.getString(R.string.kilometers_away);
-        String distanceText = String.format(distanceTemplate, restaurant.getDistanceToShow());
+        Context context = distance.getContext();
+        String distanceTemplate = showMiles
+                ? context.getString(R.string.miles_away)
+                : context.getString(R.string.kilometers_away);
+        String distanceText = String.format(distanceTemplate, restaurant.getDistanceToShow(context));
         distance.setText(distanceText);
     }
 }

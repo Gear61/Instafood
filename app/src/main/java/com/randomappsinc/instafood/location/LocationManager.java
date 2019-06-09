@@ -7,7 +7,6 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -16,12 +15,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.api.RestaurantFetcher;
+import com.randomappsinc.instafood.persistence.PreferencesManager;
 import com.randomappsinc.instafood.utils.PermissionUtils;
 
 public class LocationManager implements LocationForm.Listener {
@@ -61,6 +58,7 @@ public class LocationManager implements LocationForm.Listener {
     protected LocationForm locationForm;
 
     protected RestaurantFetcher restaurantFetcher;
+    protected PreferencesManager preferencesManager;
 
     public LocationManager(@NonNull Listener listener, @NonNull Activity activity) {
         this.listener = listener;
@@ -77,19 +75,13 @@ public class LocationManager implements LocationForm.Listener {
                 .content(R.string.location_services_denial)
                 .positiveText(R.string.location_services_confirm)
                 .negativeText(R.string.enter_location_manually)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        locationServicesManager.askForLocationServices(LOCATION_SERVICES_CODE);
-                        listener.onServicesOrPermissionChoice();
-                    }
+                .onPositive((dialog, which) -> {
+                    locationServicesManager.askForLocationServices(LOCATION_SERVICES_CODE);
+                    listener.onServicesOrPermissionChoice();
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        locationForm.show(R.string.location_form_prompt);
-                        listener.onServicesOrPermissionChoice();
-                    }
+                .onNegative((dialog, which) -> {
+                    locationForm.show(R.string.location_form_prompt);
+                    listener.onServicesOrPermissionChoice();
                 })
                 .build();
 
@@ -99,19 +91,13 @@ public class LocationManager implements LocationForm.Listener {
                 .content(R.string.location_permission_denial)
                 .positiveText(R.string.give_location_permission)
                 .negativeText(R.string.enter_location_manually)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        requestLocationPermission();
-                        listener.onServicesOrPermissionChoice();
-                    }
+                .onPositive((dialog, which) -> {
+                    requestLocationPermission();
+                    listener.onServicesOrPermissionChoice();
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        locationForm.show(R.string.location_form_prompt);
-                        listener.onServicesOrPermissionChoice();
-                    }
+                .onNegative((dialog, which) -> {
+                    locationForm.show(R.string.location_form_prompt);
+                    listener.onServicesOrPermissionChoice();
                 })
                 .build();
 
@@ -122,17 +108,18 @@ public class LocationManager implements LocationForm.Listener {
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         restaurantFetcher = RestaurantFetcher.getInstance();
+        preferencesManager = new PreferencesManager(activity);
     }
 
     @Override
     public void onLocationEntered(String location) {
         stopFetchingCurrentLocation();
         restaurantFetcher.setLocation(location);
-        restaurantFetcher.fetchRestaurant();
+        restaurantFetcher.fetchRestaurant(activity);
     }
 
     public void fetchCurrentLocation() {
-        if (PermissionUtils.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (PermissionUtils.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, activity)) {
             checkLocationServicesAndFetchLocationIfOn();
         } else {
             requestLocationPermission();
@@ -144,20 +131,12 @@ public class LocationManager implements LocationForm.Listener {
                 .addLocationRequest(locationRequest);
         SettingsClient client = LocationServices.getSettingsClient(activity);
         client.checkLocationSettings(builder.build())
-                .addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
-                    @Override
-                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                        fetchAutomaticLocation();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        if (exception instanceof ResolvableApiException) {
-                            locationServicesManager.askForLocationServices(LOCATION_SERVICES_CODE);
-                        } else {
-                            onLocationFetchFail();
-                        }
+                .addOnSuccessListener(locationSettingsResponse -> fetchAutomaticLocation())
+                .addOnFailureListener(exception -> {
+                    if (exception instanceof ResolvableApiException) {
+                        locationServicesManager.askForLocationServices(LOCATION_SERVICES_CODE);
+                    } else {
+                        onLocationFetchFail();
                     }
                 });
     }
@@ -188,7 +167,7 @@ public class LocationManager implements LocationForm.Listener {
                 Location location = locationResult.getLastLocation();
                 String latLongString = location.getLatitude() + ", " + location.getLongitude();
                 restaurantFetcher.setLocation(latLongString);
-                restaurantFetcher.fetchRestaurant();
+                restaurantFetcher.fetchRestaurant(activity);
             } else {
                 onLocationFetchFail();
             }

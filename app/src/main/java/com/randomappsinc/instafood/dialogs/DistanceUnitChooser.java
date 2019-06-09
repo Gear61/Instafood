@@ -13,7 +13,8 @@ public class DistanceUnitChooser {
     private MaterialDialog dialog;
 
     public DistanceUnitChooser(Context context) {
-        @DistanceUnit String currentUnit = PreferencesManager.get().getDistanceUnit();
+        PreferencesManager preferencesManager = new PreferencesManager(context);
+        @DistanceUnit String currentUnit = preferencesManager.getDistanceUnit();
         int currentPosition = currentUnit.equals(DistanceUnit.MILES) ? 0 : 1;
 
         dialog = new MaterialDialog.Builder(context)
@@ -24,8 +25,8 @@ public class DistanceUnitChooser {
                     @DistanceUnit String chosenUnit = which == 0
                             ? DistanceUnit.MILES
                             : DistanceUnit.KILOMETERS;
-                    PreferencesManager.get().setDistanceUnit(chosenUnit);
-                    UIUtils.showLongToast(R.string.distance_unit_set);
+                    preferencesManager.setDistanceUnit(chosenUnit);
+                    UIUtils.showLongToast(R.string.distance_unit_set, context);
                     return true;
                 })
                 .positiveText(R.string.choose)

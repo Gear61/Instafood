@@ -28,16 +28,19 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
     protected Context context;
     protected String[] options;
     protected String[] icons;
+    protected PreferencesManager preferencesManager;
 
     public SettingsAdapter(Context context, @NonNull ItemSelectionListener itemSelectionListener) {
         this.itemSelectionListener = itemSelectionListener;
         this.context = context;
         this.options = context.getResources().getStringArray(R.array.settings_options);
         this.icons = context.getResources().getStringArray(R.array.settings_icons);
+        this.preferencesManager = new PreferencesManager(context);
     }
 
+    @NonNull
     @Override
-    public SettingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SettingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(
                 R.layout.settings_item_cell,
                 parent,
@@ -46,7 +49,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
     }
 
     @Override
-    public void onBindViewHolder(SettingViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SettingViewHolder holder, int position) {
         holder.loadSetting(position);
     }
 
@@ -70,7 +73,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
             icon.setText(icons[position]);
 
             if (position == 0) {
-                UIUtils.setCheckedImmediately(shakeToggle, PreferencesManager.get().isShakeEnabled());
+                UIUtils.setCheckedImmediately(shakeToggle, preferencesManager.isShakeEnabled());
                 shakeToggle.setVisibility(View.VISIBLE);
             } else {
                 shakeToggle.setVisibility(View.GONE);
@@ -79,7 +82,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.Settin
 
         @OnClick(R.id.shake_toggle)
         public void onSoundToggle() {
-            PreferencesManager.get().setShakeEnabled(shakeToggle.isChecked());
+            preferencesManager.setShakeEnabled(shakeToggle.isChecked());
         }
 
         @OnClick(R.id.parent)

@@ -59,12 +59,12 @@ public class UIUtils {
         return R.drawable.stars_5;
     }
 
-    public static void showLongToast(@StringRes int stringId) {
-        showToast(stringId, Toast.LENGTH_LONG);
+    public static void showLongToast(@StringRes int stringId, Context context) {
+        showToast(stringId, Toast.LENGTH_LONG, context);
     }
 
-    protected static void showToast(@StringRes int stringId, int toastLength) {
-        Toast.makeText(MyApplication.getAppContext(), stringId, toastLength).show();
+    protected static void showToast(@StringRes int stringId, int toastLength, Context context) {
+        Toast.makeText(context, stringId, toastLength).show();
     }
 
     public static void setCheckedImmediately(CompoundButton checkableView, boolean checked) {
@@ -72,14 +72,15 @@ public class UIUtils {
         checkableView.jumpDrawablesToCurrentState();
     }
 
-    public static int getColor(@ColorRes int color) {
-        return MyApplication.getAppContext().getResources().getColor(color);
+    public static int getColor(@ColorRes int color, Context context) {
+        return context.getResources().getColor(color);
     }
 
     public static void askForRatingIfAppropriate(final Activity activity) {
-        if (PreferencesManager.get().getNumAppOpens() == NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING
-                && PreferencesManager.get().getNumRatingAsks() == 0) {
-            PreferencesManager.get().logRatingAsk();
+        PreferencesManager preferencesManager = new PreferencesManager(activity);
+        if (preferencesManager.getNumAppOpens() == NUM_APP_OPENS_BEFORE_ASKING_FOR_RATING
+                && preferencesManager.getNumRatingAsks() == 0) {
+            preferencesManager.logRatingAsk();
             new MaterialDialog.Builder(activity)
                     .content(R.string.please_rate)
                     .negativeText(R.string.no_im_good)
@@ -88,7 +89,7 @@ public class UIUtils {
                         Uri uri = Uri.parse("market://details?id=" + activity.getPackageName());
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         if (!(activity.getPackageManager().queryIntentActivities(intent, 0).size() > 0)) {
-                            UIUtils.showToast(R.string.play_store_error, Toast.LENGTH_LONG);
+                            UIUtils.showLongToast(R.string.play_store_error, activity);
                             return;
                         }
                         activity.startActivity(intent);

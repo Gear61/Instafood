@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +19,7 @@ import com.randomappsinc.instafood.api.RestaurantFetcher;
 import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.models.Filter;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
+import com.randomappsinc.instafood.utils.UIUtils;
 import com.randomappsinc.instafood.views.AttributePickerView;
 import com.randomappsinc.instafood.views.PriceRangePickerView;
 
@@ -48,6 +48,7 @@ public class FilterActivity extends AppCompatActivity {
     private Filter filter;
     private PriceRangePickerView priceRangePickerView;
     private AttributePickerView attributePickerView;
+    private PreferencesManager preferencesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,15 +64,17 @@ public class FilterActivity extends AppCompatActivity {
                 .colorRes(R.color.white)
                 .actionBarSize());
 
+        preferencesManager = new PreferencesManager(this);
+
         restaurantFetcher = RestaurantFetcher.getInstance();
-        radiusSlider.setMax(PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
+        radiusSlider.setMax(preferencesManager.getDistanceUnit().equals(DistanceUnit.MILES)
                 ? maxMilesSliderValue
                 : maxKilometersSliderValue);
 
         priceRangePickerView = new PriceRangePickerView(filterContent);
         attributePickerView = new AttributePickerView(filterContent);
 
-        filter = PreferencesManager.get().getFilter();
+        filter = preferencesManager.getFilter();
         loadFilterIntoView();
 
         radiusSlider.setOnSeekBarChangeListener(mRadiusSliderListener);
@@ -92,7 +95,7 @@ public class FilterActivity extends AppCompatActivity {
 
     protected void setDistanceSliderText(int sliderValue) {
         double progressAdjusted = (double) (sliderValue + 1) / 10.0;
-        String template = PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
+        String template = preferencesManager.getDistanceUnit().equals(DistanceUnit.MILES)
                 ? radiusTemplateMiles
                 : radiusTemplateKilometers;
         distanceText.setText(String.format(template, progressAdjusted));
@@ -101,7 +104,7 @@ public class FilterActivity extends AppCompatActivity {
     private void loadFilterIntoView() {
         searchTerm.setText(restaurantFetcher.getSearchTerm());
 
-        float filterDistanceValue = PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)
+        float filterDistanceValue = preferencesManager.getDistanceUnit().equals(DistanceUnit.MILES)
                 ? filter.getRadiusInMiles()
                 : filter.getRadiusInKilometers();
 
@@ -133,15 +136,15 @@ public class FilterActivity extends AppCompatActivity {
         double sliderVal = radiusSlider.getProgress();
         double distanceValue = (sliderVal + 1) / 10;
 
-        if (PreferencesManager.get().getDistanceUnit().equals(DistanceUnit.MILES)) {
+        if (preferencesManager.getDistanceUnit().equals(DistanceUnit.MILES)) {
             filter.setRadiusWithMiles(distanceValue);
         } else {
             filter.setRadiusWithKilometers(distanceValue);
         }
         filter.setPricesRanges(priceRangePickerView.getPriceRanges());
         filter.setAttributes(attributePickerView.getAttributes());
-        PreferencesManager.get().saveFilter(filter);
-        Toast.makeText(this, R.string.filter_applied, Toast.LENGTH_SHORT).show();
+        preferencesManager.saveFilter(filter);
+        UIUtils.showLongToast(R.string.filter_applied, this);
         setResult(RESULT_OK);
         finish();
     }

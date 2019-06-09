@@ -1,5 +1,7 @@
 package com.randomappsinc.instafood.api.callbacks;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.randomappsinc.instafood.R;
@@ -17,19 +19,25 @@ import retrofit2.Response;
 
 public class FindRestaurantsCallback implements Callback<RestaurantSearchResults> {
 
+    private Context context;
+
+    public FindRestaurantsCallback(Context context) {
+        this.context = context;
+    }
+
     @Override
     public void onResponse(
             @NonNull Call<RestaurantSearchResults> call,
             @NonNull Response<RestaurantSearchResults> response) {
-        if (response.code() == ApiConstants.HTTP_STATUS_OK) {
-            List<Restaurant> restaurants = response.body().getRestaurants();
+        if (response.code() == ApiConstants.HTTP_STATUS_OK && response.body() != null) {
+            List<Restaurant> restaurants = response.body().getRestaurants(context);
             if (restaurants.isEmpty()) {
-                UIUtils.showLongToast(R.string.no_open_restaurants);
+                UIUtils.showLongToast(R.string.no_open_restaurants, context);
             } else {
                 RestaurantFetcher.getInstance().setRestaurantList(restaurants);
             }
         } else {
-            UIUtils.showLongToast(R.string.restaurant_call_bad_result);
+            UIUtils.showLongToast(R.string.restaurant_call_bad_result, context);
         }
     }
 

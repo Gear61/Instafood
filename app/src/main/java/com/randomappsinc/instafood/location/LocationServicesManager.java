@@ -67,7 +67,7 @@ class LocationServicesManager {
 
     // Get location services the old fashioned way
     protected void openLocationSettings() {
-        UIUtils.showLongToast(R.string.turn_on_location_services);
+        UIUtils.showLongToast(R.string.turn_on_location_services, activity);
         activity.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
     }
 }

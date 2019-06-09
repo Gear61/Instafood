@@ -8,7 +8,6 @@ import com.randomappsinc.instafood.constants.DistanceUnit;
 import com.randomappsinc.instafood.models.Filter;
 import com.randomappsinc.instafood.utils.DeviceUtils;
 import com.randomappsinc.instafood.utils.DistanceUtils;
-import com.randomappsinc.instafood.utils.MyApplication;
 
 import java.util.Set;
 
@@ -24,30 +23,9 @@ public class PreferencesManager {
     private static final String FILTER_ATTRIBUTES = "filterAttributes";
     private static final String SHAKE_ENABLED = "shakeEnabled";
 
-    private static PreferencesManager instance;
-
-    public static PreferencesManager get() {
-        if (instance == null) {
-            synchronized (PreferenceManager.class) {
-                if (instance == null) {
-                    instance = getSync();
-                }
-            }
-        }
-        return instance;
-    }
-
-    private static synchronized PreferencesManager getSync() {
-        if (instance == null) {
-            instance = new PreferencesManager();
-        }
-        return instance;
-    }
-
     private SharedPreferences prefs;
 
-    private PreferencesManager() {
-        Context context = MyApplication.getAppContext();
+    public PreferencesManager(Context context) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
