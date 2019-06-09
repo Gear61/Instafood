@@ -2,7 +2,8 @@ package com.randomappsinc.instafood.api;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import com.randomappsinc.instafood.api.models.DailyHours;
 import com.randomappsinc.instafood.models.Restaurant;

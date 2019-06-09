@@ -1,6 +1,6 @@
 package com.randomappsinc.instafood.constants;
 
-import android.support.annotation.StringDef;
+import androidx.annotation.StringDef;
 
 @StringDef({
         DistanceUnit.MILES,

@@ -1,8 +1,9 @@
 package com.randomappsinc.instafood.views;
 
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.api.models.DailyHours;

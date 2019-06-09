@@ -1,6 +1,6 @@
 package com.randomappsinc.instafood.api.callbacks;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.api.ApiConstants;

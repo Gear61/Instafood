@@ -2,13 +2,14 @@ package com.randomappsinc.instafood.fragments;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.IoniconsIcons;
@@ -32,7 +33,7 @@ public class PictureFullViewFragment extends Fragment {
         return fragment;
     }
 
-    private final Callback mImageLoadingCallback = new Callback() {
+    private final Callback imageLoadingCallback = new Callback() {
         @Override
         public void onSuccess() {
             parent.animate().alpha(1.0f).setDuration(getResources().getInteger(R.integer.default_anim_length));
@@ -65,7 +66,7 @@ public class PictureFullViewFragment extends Fragment {
                     .error(defaultThumbnail)
                     .fit()
                     .centerInside()
-                    .into(picture, mImageLoadingCallback);
+                    .into(picture, imageLoadingCallback);
         } else {
             throw new IllegalArgumentException("Started full view without a picture to load");
         }

@@ -3,10 +3,11 @@ package com.randomappsinc.instafood.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Switch;
+
+import androidx.core.app.ShareCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.adapters.SettingsAdapter;

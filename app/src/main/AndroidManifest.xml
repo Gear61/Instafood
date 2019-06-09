@@ -12,15 +12,18 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        >
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_api_key"/>
+            android:value="@string/google_maps_api_key"
+            />
 
         <activity
             android:name=".activities.MainActivity"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,19 +34,19 @@
         <activity
             android:name=".activities.PictureFullViewActivity"
             android:theme="@style/AppTheme.PictureFullView"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:configChanges="orientation|screenSize"
+            />
 
         <activity
             android:name=".activities.FilterActivity"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateAlwaysHidden">
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden"
+            />
 
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/settings"
-            android:configChanges="orientation|screenSize">
-        </activity>
+            android:configChanges="orientation|screenSize"
+            />
     </application>
 </manifest>
