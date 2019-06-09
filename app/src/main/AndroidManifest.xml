@@ -21,7 +21,8 @@
             />
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.SplashActivity"
+            android:theme="@style/SplashTheme"
             android:configChanges="orientation|screenSize"
             >
 
@@ -30,6 +31,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="orientation|screenSize"
+            />
 
         <activity
             android:name=".activities.PictureFullViewActivity"
