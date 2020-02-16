@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ShareCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,7 +57,8 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
 
     private static final String RESTAURANT_KEY = "restaurant";
 
-    @BindView(R.id.homepage_scrollview) ScrollView parent;
+    @BindView(R.id.swipe_container) SwipeRefreshLayout swipeLayout;
+    @BindView(R.id.homepage_scrollview) ScrollView scrollView;
     @BindView(R.id.hours_card) View hoursCard;
     @BindView(R.id.restaurant_map) MapView restaurantMap;
     @BindView(R.id.restaurant_info_parent) View restaurantInfo;
@@ -106,6 +108,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
 
         restaurantFetcher = RestaurantFetcher.getInstance();
         restaurantFetcher.setListener(restaurantInfoListener);
+        swipeLayout.setEnabled(false);
 
         if (savedInstanceState != null) {
             restaurant = savedInstanceState.getParcelable(RESTAURANT_KEY);
@@ -156,7 +159,8 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     private final RestaurantFetcher.Listener restaurantInfoListener = new RestaurantFetcher.Listener() {
         @Override
         public void onRestaurantFetched(Restaurant freshRestaurant) {
-            parent.fullScroll(ScrollView.FOCUS_UP);
+            swipeLayout.setEnabled(true);
+            scrollView.fullScroll(ScrollView.FOCUS_UP);
             photosList.smoothScrollToPosition(0);
 
             restaurant = freshRestaurant;
