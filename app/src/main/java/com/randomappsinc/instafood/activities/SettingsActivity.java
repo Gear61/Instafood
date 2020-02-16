@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Switch;
 
 import androidx.core.app.ShareCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.randomappsinc.instafood.R;
@@ -14,7 +16,6 @@ import com.randomappsinc.instafood.adapters.SettingsAdapter;
 import com.randomappsinc.instafood.dialogs.DistanceUnitChooser;
 import com.randomappsinc.instafood.persistence.PreferencesManager;
 import com.randomappsinc.instafood.utils.UIUtils;
-import com.randomappsinc.instafood.views.SimpleDividerItemDecoration;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -42,7 +43,9 @@ public class SettingsActivity extends StandardActivity implements SettingsAdapte
 
         preferencesManager = new PreferencesManager(this);
 
-        settingsOptions.addItemDecoration(new SimpleDividerItemDecoration(this));
+        DividerItemDecoration divider = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        divider.setDrawable(ContextCompat.getDrawable(this, R.drawable.line_divider));
+        settingsOptions.addItemDecoration(divider);
         settingsOptions.setAdapter(new SettingsAdapter(this, this));
         distanceUnitChooser = new DistanceUnitChooser(this);
     }
