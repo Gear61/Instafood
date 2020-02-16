@@ -51,7 +51,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends StandardActivity implements RestaurantReviewsAdapter.Listener,
         RestaurantPhotosAdapter.Listener, OnMapReadyCallback, LocationManager.Listener,
-        ShakeDetector.Listener {
+        ShakeDetector.Listener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int FILTER_REQUEST_CODE = 1;
 
@@ -108,7 +108,8 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
 
         restaurantFetcher = RestaurantFetcher.getInstance();
         restaurantFetcher.setListener(restaurantInfoListener);
-        swipeLayout.setEnabled(false);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeResources(R.color.red, R.color.yellow, R.color.green, R.color.blue);
 
         if (savedInstanceState != null) {
             restaurant = savedInstanceState.getParcelable(RESTAURANT_KEY);
@@ -129,13 +130,18 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         restaurantMap.onSaveInstanceState(outState);
         if (restaurant != null) {
             outState.putParcelable(RESTAURANT_KEY, restaurant);
         }
         restaurantFetcher.persistState(outState);
+    }
+
+    @Override
+    public void onRefresh() {
+        resetAndFindNewRestaurant();
     }
 
     @Override
@@ -156,9 +162,17 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         }
     }
 
+    @Override
+    public void onLocationFetched(String location) {
+        swipeLayout.setRefreshing(true);
+        restaurantFetcher.setLocation(location);
+        restaurantFetcher.fetchRestaurant(this);
+    }
+
     private final RestaurantFetcher.Listener restaurantInfoListener = new RestaurantFetcher.Listener() {
         @Override
         public void onRestaurantFetched(Restaurant freshRestaurant) {
+            swipeLayout.setRefreshing(false);
             swipeLayout.setEnabled(true);
             scrollView.fullScroll(ScrollView.FOCUS_UP);
             photosList.smoothScrollToPosition(0);
@@ -320,7 +334,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
     @Override
     public void onRequestPermissionsResult(
             int requestCode,
-            @NonNull String permissions[],
+            @NonNull String[] permissions,
             @NonNull int[] grantResults) {
         if (requestCode != LocationManager.LOCATION_PERMISSION_REQUEST_CODE) {
             return;

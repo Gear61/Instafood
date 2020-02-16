@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.provider.Settings;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -14,7 +12,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.randomappsinc.instafood.R;
 import com.randomappsinc.instafood.utils.UIUtils;
@@ -42,24 +39,21 @@ class LocationServicesManager {
                         .getSettingsClient(activity)
                         .checkLocationSettings(locationBuilder.build());
 
-        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
-                try {
-                    task.getResult(ApiException.class);
-                } catch (ApiException exception) {
-                    switch (exception.getStatusCode()) {
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            try {
-                                ResolvableApiException resolvable = (ResolvableApiException) exception;
-                                // Show dialog to turn on location services
-                                resolvable.startResolutionForResult(activity, requestCode);
-                            } catch (IntentSender.SendIntentException |ClassCastException ignored) {}
-                            break;
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            openLocationSettings();
-                            break;
-                    }
+        result.addOnCompleteListener(task -> {
+            try {
+                task.getResult(ApiException.class);
+            } catch (ApiException exception) {
+                switch (exception.getStatusCode()) {
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        try {
+                            ResolvableApiException resolvable = (ResolvableApiException) exception;
+                            // Show dialog to turn on location services
+                            resolvable.startResolutionForResult(activity, requestCode);
+                        } catch (IntentSender.SendIntentException |ClassCastException ignored) {}
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        openLocationSettings();
+                        break;
                 }
             }
         });
