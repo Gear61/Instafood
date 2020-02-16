@@ -245,6 +245,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         startActivity(Intent.createChooser(
                 new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(mapUri)),
                 getString(R.string.navigate_with)));
+        overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
     }
 
     @OnClick(R.id.restaurant_thumbnail)
@@ -279,6 +280,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
                 .getIntent();
         if (shareIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(shareIntent);
+            overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
         }
     }
 
@@ -292,6 +294,7 @@ public class MainActivity extends StandardActivity implements RestaurantReviewsA
         startActivity(Intent.createChooser(
                 new Intent(Intent.ACTION_DIAL, Uri.parse(phoneUri)),
                 getString(R.string.call_with)));
+        overridePendingTransition(R.anim.slide_in_bottom, R.anim.stay);
     }
 
     private void resetAndFindNewRestaurant() {
