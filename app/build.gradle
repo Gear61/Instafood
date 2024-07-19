@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 34
     defaultConfig {
         applicationId "com.randomappsinc.instafood"
-        minSdkVersion 16
+        minSdkVersion 21
+        compileSdk 34
         targetSdkVersion 34
         versionCode 23
         versionName "1.2.2"
@@ -26,31 +26,31 @@ android {
                     'proguard-rules.pro'
         }
     }
-    lintOptions {
-        disable 'GoogleAppIndexingWarning'
-        baseline file("lint-baseline.xml")
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace 'com.randomappsinc.instafood'
+    lint {
+        baseline file('lint-baseline.xml')
+        disable 'GoogleAppIndexingWarning'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.jakewharton:butterknife:10.2.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
     implementation 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.google.android.gms:play-services-location:21.3.0'
+    implementation 'com.google.android.gms:play-services-maps:19.0.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     implementation 'com.squareup:seismic:1.0.2'
 }
