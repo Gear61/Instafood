@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.randomappsinc.instafood">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/>
 
     <application
         android:name="com.randomappsinc.instafood.utils.MyApplication"
@@ -24,6 +25,7 @@
             android:name=".activities.SplashActivity"
             android:theme="@style/SplashTheme"
             android:configChanges="orientation|screenSize"
+            android:exported="true"
             >
 
             <intent-filter>
